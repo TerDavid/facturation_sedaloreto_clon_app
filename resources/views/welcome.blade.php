@@ -14,7 +14,7 @@
 
   <style>
     body {
-      background: url('https://elcomercio.pe/resizer/0wMuRPeoVuNVDhvba8wDO1Y5NiY=/980x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/5SN2I6LI5ZCNJDQADXNVFXCHBU.jpg') center/cover no-repeat;
+      background: url('https://elcomercio.pe/resizer/u2g2zJ881foh8jk6S1yEGaOWaGg=/980x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/6YIMOUU4G5G6PC7TKRBRFUHAFU.jpg') center/cover no-repeat;
     }
   </style>
 </head>
@@ -24,21 +24,40 @@
   <div class="absolute inset-0 bg-black opacity-60"></div>
 
   {{-- AppBar --}}
-  <header class="absolute top-0 left-0 w-full z-20 flex flex-col sm:flex-row items-center justify-between px-4 py-3 space-y-2 sm:space-y-0">
-    <img
-      src="https://pagoseguroiquitos.sedaloreto.com.pe/img/logochico.png"
-      alt="Logo"
-      class="h-12 w-auto"
-    />
-    <div class="text-white font-bold text-xs sm:text-sm flex flex-col sm:flex-row sm:space-x-6 space-y-1 sm:space-y-0 text-center sm:text-left">
+  <header
+  class="absolute top-0 left-0 w-full z-20
+         flex flex-col sm:flex-row items-center
+         justify-between px-4 py-3
+         space-y-2 sm:space-y-0"
+>
+  <img
+    src="https://pagoseguroiquitos.sedaloreto.com.pe/img/logochico.png"
+    alt="Logo"
+    class="sm:h-20 w-auto"
+  />
+
+  <!-- wrapper flex-col en móvil, fila en sm -->
+  <div class="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-2 sm:space-y-0">
+    <!-- este bloque ahora centra sus spans en móvil -->
+    <div class="flex flex-col sm:flex-row items-center text-white font-bold text-xs sm:text-sm space-y-1 sm:space-y-0 sm:space-x-6 text-center sm:text-left">
       <span>WhatsApp: 965962357</span>
       <span>Correo: atencionalcliente@sedaloreto.com.pe</span>
     </div>
-  </header>
+
+    <a
+      href="{{ route('login') }}"
+      class="text-white font-bold bg-red-600 hover:bg-red-700 px-4 py-1 rounded-md transition text-sm"
+    >
+      Entrar
+    </a>
+  </div>
+</header>
+
+
 
   {{-- Title --}}
-  <h1 class="relative z-10 text-white font-bold text-2xl sm:text-3xl mb-6 text-center px-4">
-    Consulta de Suministro
+  <h1 class="relative z-10 text-white font-bold text-2xl sm:text-4xl mb-6 text-center px-4">
+    Consulta factura mes {{ \Carbon\Carbon::now()->locale('es')->isoFormat('MMMM') }}
   </h1>
 
   {{-- Form Card --}}
