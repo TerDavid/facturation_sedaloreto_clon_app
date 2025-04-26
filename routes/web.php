@@ -3,6 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlantaTratamientoController;
+use App\Http\Controllers\BombaAguaController;
+use App\Http\Controllers\ReservorioController;
+use App\Http\Controllers\SectorController;
+
+
+use App\Http\Controllers\RelationController;
+use App\Http\Controllers\SectorRelationController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +35,13 @@ Route::get('planta-tratamiento/create', [PlantaTratamientoController::class, 'cr
 
 Route::post('planta-tratamiento', [PlantaTratamientoController::class, 'store'])
     ->name('planta-tratamiento.store');
+
+Route::resource('bomba-agua', BombaAguaController::class);
+Route::resource('reservorio', ReservorioController::class);
+Route::resource('sector', SectorController::class);
+
+Route::get('sede', [SectorRelationController::class, 'index'])
+     ->name('sede.index');
 
 });
 
