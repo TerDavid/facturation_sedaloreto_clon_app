@@ -8,22 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('planta_tratamiento', function (Blueprint $table) {
+        Schema::create('bomba_agua', function (Blueprint $table) {
             $table->id();
-            $table->string('sector');
-            $table->string('reservorio');
-            $table->string('bomba_agua');
-            // FK a ciudades
+
+            // Aquí guardaremos el nombre o código de la bomba
+            $table->string('bomba');
+
+            // Relación foránea a la tabla ciudades
             $table->foreignId('id_ciudades')
                   ->constrained('ciudades')
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('planta_tratamiento');
+        Schema::dropIfExists('bomba_agua');
     }
 };
