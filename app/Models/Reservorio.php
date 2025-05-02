@@ -20,4 +20,9 @@ class Reservorio extends Model
     {
         return $this->belongsTo(\App\Models\BombaAgua::class, 'id_bomba_agua');
     }
+
+    public function sectores()
+    {
+        return $this->hasMany(Sector::class, 'id_reservorio');
+    }
 }
