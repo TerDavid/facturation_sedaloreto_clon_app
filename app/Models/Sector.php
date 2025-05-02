@@ -20,4 +20,8 @@ class Sector extends Model
     {
         return $this->belongsTo(\App\Models\Reservorio::class, 'id_reservorio');
     }
+    public function manzanas()
+    {
+        return $this->hasMany(\App\Models\Manzana::class, 'id_sector');
+    }
 }

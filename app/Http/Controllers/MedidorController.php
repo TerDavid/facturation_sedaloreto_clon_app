@@ -36,7 +36,9 @@ class MedidorController extends Controller
 
     public function create(Ciudad $ciudad, Sector $sector)
     {
-        $manzanas = Manzana::where('id_sector', $sector->id)->get();
+        // aquí sólo traigo las manzanas de ESTE sector
+        $manzanas = $sector->manzanas()->get();
+
         return view('clientes.medidores.create', compact('ciudad','sector','manzanas'));
     }
 
@@ -53,7 +55,9 @@ class MedidorController extends Controller
 
     public function edit(Ciudad $ciudad, Sector $sector, Medidor $medidor)
     {
-        $manzanas = Manzana::where('id_sector', $sector->id)->get();
+        // lo mismo en edit
+        $manzanas = $sector->manzanas()->get();
+
         return view('clientes.medidores.edit', compact('ciudad','sector','medidor','manzanas'));
     }
 
