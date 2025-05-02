@@ -27,7 +27,7 @@
                 <td class="px-4 py-2 text-center">{{ $sector->sector }}</td>
                 <td class="px-4 py-2 text-center">{{ $sector->reservorio->reservorio }}</td>
                 <td class="px-4 py-2 text-center">{{ $sector->reservorio->bomba->bomba }}</td>
-             
+
                 <td class="px-4 py-2 text-center">
                   <a href="{{ route('medidores.index', [$ciudad, $sector]) }}"
                      class="text-blue-400 hover:underline">
