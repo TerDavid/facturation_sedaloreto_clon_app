@@ -30,7 +30,7 @@
             </div>
 
                  <!-- Card 4: Sedes (ahora link a creación de planta_tratamiento) -->
-                 <a href="{{ route('planta-tratamiento.create') }}" class="block">
+                 <a href="{{  route('sede.index') }}" class="block">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg
                                 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition">
                         <div class="p-6 text-gray-900 dark:text-gray-100 text-center font-semibold">
