@@ -11,7 +11,8 @@ class SectorController extends Controller
 {
     public function index()
     {
-        $sectores = Sector::with('reservorio')->paginate(10);
+        $sectores = Sector::with('reservorio.bomba.ciudad')  // carga reservorio → bomba → ciudad
+        ->paginate(10);
         return view('sedes.sector.index', compact('sectores'));
     }
 
