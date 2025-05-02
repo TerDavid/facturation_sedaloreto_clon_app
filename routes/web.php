@@ -6,6 +6,7 @@ use App\Http\Controllers\PlantaTratamientoController;
 use App\Http\Controllers\BombaAguaController;
 use App\Http\Controllers\ReservorioController;
 use App\Http\Controllers\SectorController;
+use App\Http\Controllers\ManzanaController;
 
 
 use App\Http\Controllers\RelationController;
@@ -39,6 +40,7 @@ Route::post('planta-tratamiento', [PlantaTratamientoController::class, 'store'])
 Route::resource('bomba-agua', BombaAguaController::class);
 Route::resource('reservorio', ReservorioController::class);
 Route::resource('sector', SectorController::class);
+Route::resource('manzana', ManzanaController::class);
 
 Route::get('sede', [SectorRelationController::class, 'index'])
      ->name('sede.index');

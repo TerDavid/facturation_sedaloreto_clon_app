@@ -11,7 +11,7 @@ class ReservorioController extends Controller
 {
     public function index()
     {
-        $reservorios = Reservorio::with('bomba')->paginate(10);
+        $reservorios = Reservorio::with('bomba.ciudad')->paginate(10);
         return view('sedes.reservorio.index', compact('reservorios'));
     }
 

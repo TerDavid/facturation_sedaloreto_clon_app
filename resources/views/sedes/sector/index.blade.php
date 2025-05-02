@@ -15,22 +15,27 @@
         Nuevo Sector
       </a>
 
-      <table class="w-full table-auto bg-gray-800 text-white rounded">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full table-auto bg-gray-800 text-white rounded mb-6 whitespace-nowrap">
         <thead>
           <tr>
-            <th class="px-4 py-2">ID</th>
-            <th class="px-4 py-2">Sector</th>
-            <th class="px-4 py-2">Reservorio</th>
-            <th class="px-4 py-2">Acciones</th>
+            <th class="px-4 py-2 text-center">ID</th>
+            <th class="px-4 py-2 text-center">Sector</th>
+            <th class="px-4 py-2 text-center">Reservorio</th>
+            <th class="px-4 py-2 text-center">Ciudad</th>
+            <th class="px-4 py-2 text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
         @foreach($sectores as $s)
           <tr class="border-b border-gray-700">
-            <td class="px-4 py-2">{{ $s->id }}</td>
-            <td class="px-4 py-2">{{ $s->sector }}</td>
-            <td class="px-4 py-2">{{ $s->reservorio->reservorio }}</td>
-            <td class="px-4 py-2 space-x-2">
+            <td class="px-4 py-2 text-center">{{ $s->id }}</td>
+            <td class="px-4 py-2 text-center">{{ $s->sector }}</td>
+            <td class="px-4 py-2 text-center">{{ $s->reservorio->reservorio }}</td>
+            <td class="px-4 py-2 text-center">
+                {{ $s->reservorio->bomba->ciudad->nombre ?? '—' }}
+              </td>
+            <td class="px-4 py-2 text-center space-x-2">
               <a href="{{ route('sector.show',$s) }}"
                  class="text-blue-400 hover:underline">Ver</a>
               <a href="{{ route('sector.edit',$s) }}"
@@ -49,6 +54,7 @@
         @endforeach
         </tbody>
       </table>
+    </div>
 
       <div class="mt-4">
         {{ $sectores->links() }}
