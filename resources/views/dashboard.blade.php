@@ -15,12 +15,16 @@
                 </div>
             </div>
 
-            <!-- Card 2: Clientes -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <!-- Card 2: Clientes (ahora link a la vista de selección de ciudad) -->
+            <a href="{{ route('clientes.index') }}" class="block">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg
+                            hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition">
                 <div class="p-6 text-gray-900 dark:text-gray-100 text-center font-semibold">
                     {{ __('Clientes') }}
                 </div>
-            </div>
+                </div>
+            </a>
+
 
             <!-- Card 3: Personal Técnico -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

@@ -21,4 +21,11 @@ class Ciudad extends Model
     {
         return $this->hasMany(PlantaTratamiento::class, 'id_ciudades');
     }
+    
+    public function bombas()
+    {
+        return $this->hasMany(BombaAgua::class, 'id_ciudades');
+    }
+
+
 }

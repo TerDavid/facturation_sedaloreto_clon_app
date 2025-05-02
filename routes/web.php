@@ -7,6 +7,8 @@ use App\Http\Controllers\BombaAguaController;
 use App\Http\Controllers\ReservorioController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\ManzanaController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\MedidorController;
 
 
 use App\Http\Controllers\RelationController;
@@ -44,9 +46,43 @@ Route::resource('manzana', ManzanaController::class);
 
 Route::get('sede', [SectorRelationController::class, 'index'])
      ->name('sede.index');
-     
+
 Route::get('sede/sectores', [SectorRelationController::class, 'sectores'])
 ->name('sede.sectores');
+
+
+Route::get('clientes', [ClienteController::class,'index'])
+     ->name('clientes.index');
+
+Route::get('clientes/{ciudad}', [ClienteController::class,'show'])
+     ->name('clientes.show');
+
+
+
+// 1️⃣ Listar sectores de la ciudad
+Route::get('clientes/{ciudad}/sectores',
+    [MedidorController::class,'sectores'])
+    ->name('medidores.sectores');
+
+// 2️⃣ Listar medidores de un sector en esa ciudad
+Route::get('clientes/{ciudad}/sectores/{sector}/medidores',
+    [MedidorController::class,'index'])
+    ->name('medidores.index');
+
+// Crear, editar, eliminar medidores, pasando ciudad y sector
+Route::prefix('clientes/{ciudad}/sectores/{sector}/medidores')
+     ->name('medidores.')
+     ->group(function(){
+         Route::get('create',  [MedidorController::class,'create'])->name('create');
+         Route::post('/',      [MedidorController::class,'store'])->name('store');
+         Route::get('{medidor}/edit', [MedidorController::class,'edit'])->name('edit');
+         Route::put('{medidor}',      [MedidorController::class,'update'])->name('update');
+         Route::delete('{medidor}',   [MedidorController::class,'destroy'])->name('destroy');
+     });
+
+
+
+
 
 });
 
