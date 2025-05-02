@@ -16,22 +16,18 @@ class SectorController extends Controller
         $query = Sector::with('reservorio.bomba.ciudad');
 
         if ($request->filled('ciudad_id')) {
-            // 1) obtengo la ciudad para mostrar su nombre, si quieres
-            $ciudad = Ciudad::findOrFail($request->ciudad_id);
-
-            // 2) filtro sectores cuya bomba pertenezca a esa ciudad
+            // Filtro por ciudad y muestro la vista filtrada
+            $ciudad   = Ciudad::findOrFail($request->ciudad_id);
             $query->whereHas('reservorio.bomba', function($q) use($request) {
                 $q->where('id_ciudades', $request->ciudad_id);
             });
-
-            // 3) pagino y devuelvo la vista de "view_sede"
             $sectores = $query->paginate(10)->withQueryString();
             return view('sedes.view_sede.index', compact('sectores', 'ciudad'));
         }
 
-        // sin filtro: vista normal de sectores
+        // Sin filtro: devuelvo la MISMA vista de sedes (view_sede)
         $sectores = $query->paginate(10);
-        return view('sedes.view_sede.index', compact('sectores'));
+        return view('sedes.sector.index', compact('sectores'));
     }
 
     public function create()
