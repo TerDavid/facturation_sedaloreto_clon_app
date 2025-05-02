@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
       <h2 class="font-semibold text-xl text-white leading-tight">
-        {{ __('Sedes') }}
+        {{ __('Sectores') }}
       </h2>
     </x-slot>
 
@@ -58,7 +58,7 @@
                 <td class="px-4 py-2 space-x-2 text-center">
                   <a href="{{ route('sector.show', $sector) }}"
                      class="text-blue-400 hover:underline">Ver Sector</a>
-                  
+
                 </td>
               </tr>
             @empty

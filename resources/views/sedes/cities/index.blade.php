@@ -9,6 +9,8 @@
         Ver Todos los Sectores
       </a>
 
+
+
       <div class="w-full overflow-x-auto">
         <table class="w-full table-auto bg-gray-800 text-white rounded whitespace-nowrap">
           <thead>
