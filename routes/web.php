@@ -44,6 +44,9 @@ Route::resource('manzana', ManzanaController::class);
 
 Route::get('sede', [SectorRelationController::class, 'index'])
      ->name('sede.index');
+     
+Route::get('sede/sectores', [SectorRelationController::class, 'sectores'])
+->name('sede.sectores');
 
 });
 
