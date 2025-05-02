@@ -1,15 +1,14 @@
 <?php
-// archivo: app/Http/Controllers/RelationController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\Sector;
+use App\Models\Ciudad;
 
 class SectorRelationController extends Controller
 {
     public function index()
     {
-        $sectores = Sector::with('reservorio.bomba.ciudad')->get();
-        return view('sedes.view_sede.index', compact('sectores'));
+        $ciudades = Ciudad::all();
+        return view('sedes.cities.index', compact('ciudades'));
     }
 }
