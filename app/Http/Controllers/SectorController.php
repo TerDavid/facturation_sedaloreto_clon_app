@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sector;
 use App\Models\Reservorio;
+use App\Models\Ciudad;
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Requests\UpdateSectorRequest;
 
@@ -15,14 +16,17 @@ class SectorController extends Controller
         $query = Sector::with('reservorio.bomba.ciudad');
 
         if ($request->filled('ciudad_id')) {
+            // Filtro por ciudad y muestro la vista filtrada
+            $ciudad   = Ciudad::findOrFail($request->ciudad_id);
             $query->whereHas('reservorio.bomba', function($q) use($request) {
-                // la FK en bomba_agua es 'id_ciudades'
                 $q->where('id_ciudades', $request->ciudad_id);
             });
+            $sectores = $query->paginate(10)->withQueryString();
+            return view('sedes.view_sede.index', compact('sectores', 'ciudad'));
         }
 
+        // Sin filtro: devuelvo la MISMA vista de sedes (view_sede)
         $sectores = $query->paginate(10);
-
         return view('sedes.sector.index', compact('sectores'));
     }
 

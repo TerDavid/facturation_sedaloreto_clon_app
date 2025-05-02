@@ -4,10 +4,10 @@
     </x-slot>
 
     <div class="p-6 space-y-4">
-      <a href="{{ route('sector.index') }}"
-         class="inline-block px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">
-        Ver Todos los Sectores
-      </a>
+     <a href="{{ route('sede.sectores') }}"
+        class="inline-block px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">
+       Ver Todos los Sectores
+     </a>
 
       <div class="w-full overflow-x-auto">
         <table class="w-full table-auto bg-gray-800 text-white rounded whitespace-nowrap">
