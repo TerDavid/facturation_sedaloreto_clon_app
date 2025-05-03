@@ -20,4 +20,9 @@ class BombaAgua extends Model
     {
         return $this->belongsTo(Ciudad::class, 'id_ciudades');
     }
+
+    public function reservorios()
+    {
+        return $this->hasMany(Reservorio::class, 'id_bomba_agua');
+    }
 }
