@@ -9,6 +9,7 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\ManzanaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\MedidorController;
+use App\Http\Controllers\GestionClienteController;
 
 
 use App\Http\Controllers\RelationController;
@@ -81,6 +82,28 @@ Route::prefix('clientes/{ciudad}/sectores/{sector}/medidores')
      });
 
 
+Route::prefix('clientes/{ciudad}/gestion')
+    ->name('gestion_clientes.')
+    ->controller(GestionClienteController::class)
+    ->group(function(){
+        Route::get('/',        'index')->name('index');
+        Route::get('create',   'create')->name('create');
+        Route::post('/',       'store')->name('store');
+        Route::get('{cliente}/edit','edit')->name('edit');
+        Route::put('{cliente}',    'update')->name('update');
+        Route::delete('{cliente}','destroy')->name('destroy');
+});
+
+Route::get(
+    'clientes/{ciudad}/gestion/create',
+    [GestionClienteController::class, 'create']
+)->name('gestion_clientes.create');
+
+// almacenar nuevo cliente
+Route::post(
+    'clientes/{ciudad}/gestion',
+    [GestionClienteController::class, 'store']
+)->name('gestion_clientes.store');
 
 
 
