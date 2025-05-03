@@ -26,14 +26,14 @@
                 </div>
             </a>
 
-            <a href="#" class="block">
+            <a href="{{ route('facturacion.sectores', $ciudad) }}" class="block">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg
                             hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition">
-                    <div class="p-6 text-gray-900 dark:text-gray-100 text-center font-semibold">
-                        {{ __('Gestionar facturación') }}
-                    </div>
+                  <div class="p-6 text-gray-900 dark:text-gray-100 text-center font-semibold">
+                    {{ __('Gestionar facturación') }}
+                  </div>
                 </div>
-            </a>
+              </a>
         </div>
     </div>
 </x-app-layout>
