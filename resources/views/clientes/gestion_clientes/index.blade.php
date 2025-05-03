@@ -47,7 +47,14 @@
                 <td class="px-4 py-2 text-center">{{ $c->correo }}</td>
                 <td class="px-4 py-2 text-center">{{ $c->direccion }}</td>
                 <td class="px-4 py-2 text-center">
-                  {{ ['Inactivo','Activo','Otro'][$c->estado] ?? $c->estado }}
+                  {{
+                    [
+                      0 => 'Inactivo',
+                      1 => 'Sin deuda',
+                      2 => 'Deuda',
+                      3 => 'Corte',
+                    ][$c->estado] ?? $c->estado
+                  }}
                 </td>
                 <td class="px-4 py-2 text-center">{{ $c->codigo_suministro }}</td>
                 <td class="px-4 py-2 text-center">{{ optional($c->sector)->sector }}</td>
