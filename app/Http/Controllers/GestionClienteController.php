@@ -9,6 +9,7 @@ use App\Models\Medidor;
 use App\Models\Sector;
 use App\Models\Reservorio;
 use App\Models\Manzana;
+use App\Models\ConsumoSinMedidor;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 
@@ -58,22 +59,22 @@ class GestionClienteController extends Controller
     // 4) Formulario de edición
     public function edit(Ciudad $ciudad, Cliente $cliente)
     {
-        // Tarifas
-        $tarifas    = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
-
-        // Medidores y sectores
-        $medidores  = Medidor::where('ciudad_id', $ciudad->id)->get();
+        // 4.1) Sectores
         $bombaIds      = $ciudad->bombas()->pluck('id');
         $reservorioIds = Reservorio::whereIn('id_bomba_agua', $bombaIds)->pluck('id');
         $sectores      = Sector::whereIn('id_reservorio', $reservorioIds)->get();
-
-        // Manzanas para el sector ya guardado en el cliente
-        $manzanas = $cliente->sector_id
-            ? Manzana::where('id_sector', $cliente->sector_id)->get()
+        // 4.2) Tarifas, medidores y consumos
+        $tarifas    = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
+        $medidores  = Medidor::where('ciudad_id', $ciudad->id)->get();
+        $consumosSM = ConsumoSinMedidor::all();
+        // 4.3) Sector actual o recién cambiado
+        $sector_id = request('sector_id', $cliente->sector_id);
+        $manzanas  = $sector_id
+            ? Manzana::where('id_sector', $sector_id)->get()
             : collect();
 
         return view('clientes.gestion_clientes.edit', compact(
-            'ciudad','cliente','tarifas','medidores','sectores','manzanas'
+            'ciudad','cliente','tarifas','medidores','sectores','manzanas','sector_id','consumosSM'
         ));
     }
 
@@ -85,7 +86,6 @@ class GestionClienteController extends Controller
             ->route('gestion_clientes.index', $ciudad)
             ->with('success','Cliente actualizado');
     }
-
     // 6) Eliminar cliente
     public function destroy(Ciudad $ciudad, Cliente $cliente)
     {
