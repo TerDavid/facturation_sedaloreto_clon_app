@@ -23,7 +23,7 @@
             <option value="">-- selecciona sector --</option>
             @foreach($sectores as $s)
               <option value="{{ $s->id }}"
-                {{ (request('sector_id') == $s->id) ? 'selected':'' }}>
+                {{ request('sector_id') == $s->id ? 'selected':'' }}>
                 {{ $s->sector }}
               </option>
             @endforeach
@@ -44,7 +44,23 @@
           {{-- ocultos básicos --}}
           <input type="hidden" name="ciudad_id" value="{{ $ciudad->id }}">
           <input type="hidden" name="sector_id" value="{{ request('sector_id') }}">
-          <input type="hidden" name="estado"     value="1">
+
+          {{-- Estado --}}
+          <div class="mb-4">
+            <label for="estado" class="block text-sm font-medium text-gray-300">
+              Estado
+            </label>
+            <select id="estado" name="estado"
+                    class="mt-1 block w-1/3 bg-gray-800 text-white border-gray-700 rounded">
+              <option value="1" {{ old('estado')==='1' ? 'selected':'' }}>Sin deuda</option>
+              <option value="0" {{ old('estado')==='0' ? 'selected':'' }}>Inactivo</option>
+              <option value="2" {{ old('estado')==='2' ? 'selected':'' }}>Deuda</option>
+              <option value="3" {{ old('estado')==='3' ? 'selected':'' }}>Corte</option>
+            </select>
+            @error('estado')
+              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+          </div>
 
           <div class="grid grid-cols-2 gap-6">
             {{-- Código de suministro --}}
@@ -184,7 +200,7 @@
               <select id="tarifa_id"
                       name="tarifa_id"
                       class="mt-1 block w-full bg-gray-800 text-white border-gray-700 rounded"
-                      @if(!old('medidor_id')) disabled @endif>
+                      @if(! old('medidor_id')) disabled @endif>
                 <option value="">-- selecciona tarifa --</option>
                 @foreach($tarifas as $t)
                   <option value="{{ $t->id }}"

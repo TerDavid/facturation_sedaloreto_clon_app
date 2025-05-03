@@ -40,11 +40,24 @@
         @csrf @method('PUT')
 
         {{-- ocultos --}}
-        <input type="hidden" name="ciudad_id"    value="{{ $ciudad->id }}" />
-        <input type="hidden" name="sector_id"    value="{{ $sector_id }}" />
-        <input type="hidden" name="estado"       value="{{ $cliente->estado }}" />
+        <input type="hidden" name="ciudad_id"  value="{{ $ciudad->id }}" />
+        <input type="hidden" name="sector_id"  value="{{ $sector_id }}" />
 
         <div class="grid grid-cols-2 gap-6">
+          {{-- Estado --}}
+          <div>
+            <label for="estado" class="block text-sm font-medium text-gray-300">
+              Estado
+            </label>
+            <select id="estado" name="estado"
+                    class="mt-1 block w-full bg-gray-800 text-white border-gray-700 rounded">
+              <option value="1" {{ old('estado', $cliente->estado)==='1' ? 'selected':'' }}>Sin deuda</option>
+              <option value="0" {{ old('estado', $cliente->estado)==='0' ? 'selected':'' }}>Inactivo</option>
+              <option value="2" {{ old('estado', $cliente->estado)==='2' ? 'selected':'' }}>Deuda</option>
+              <option value="3" {{ old('estado', $cliente->estado)==='3' ? 'selected':'' }}>Corte</option>
+            </select>
+          </div>
+
           {{-- Código de suministro --}}
           <div>
             <label for="codigo_suministro" class="block text-sm font-medium text-gray-300">

@@ -23,7 +23,7 @@ class UpdateClienteRequest extends FormRequest
             'celular'              => 'nullable|string|max:20',
             'correo'               => 'nullable|email|max:150',
             'direccion'            => 'nullable|string|max:255',
-            'estado'               => 'required|in:0,1,2',
+            'estado'               => 'required|in:0,1,2,3',
             'codigo_suministro'    => [
                                         'nullable','string',
                                         Rule::unique('clientes','codigo_suministro')->ignore($clienteId)
