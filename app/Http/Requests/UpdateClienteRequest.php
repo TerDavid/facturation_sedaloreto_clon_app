@@ -32,6 +32,8 @@ class UpdateClienteRequest extends FormRequest
             'medidor_id'           => 'nullable|exists:medidor,id',
             'tarifa_id'            => 'nullable|exists:tarifas,id',
             'consumo_sin_medidor_id'=> 'nullable|exists:consumos_sin_medidor,id',
+            'sector_id'             => 'nullable|exists:sector,id',      // ← añadido
+            'manzana_id'            => 'nullable|exists:manzana,id',    // ← añadido
         ];
     }
 }
