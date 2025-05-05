@@ -14,6 +14,7 @@ use App\Http\Controllers\GestionFacturacionController;
 use App\Http\Controllers\ConsultaFacturaController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\SectorRelationController;
+use App\Http\Controllers\TecnicoController;
 
 // ← Eliminada la ruta de closure que devolvía view('welcome')
 
@@ -136,6 +137,16 @@ Route::middleware('auth')->group(function () {
              Route::put('sectores/{sector}/{factura}',      'update')->name('update');
              Route::delete('sectores/{sector}/{factura}',   'destroy')->name('destroy');
          });
+
+
+         Route::view('tecnico', 'tecnico.index')->name('tecnico.index');
+        Route::view('tecnico/create', 'tecnico.create')->name('tecnico.create');
+        Route::view('tecnico/assign', 'tecnico.assign')->name('tecnico.assign');
+        Route::post('tecnico', [TecnicoController::class, 'store'])->name('tecnico.store');
+
+        Route::resource('tecnico', TecnicoController::class);
+
+
 });
 
 require __DIR__.'/auth.php';
