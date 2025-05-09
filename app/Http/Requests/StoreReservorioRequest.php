@@ -16,6 +16,7 @@ class StoreReservorioRequest extends FormRequest
         return [
             'reservorio'    => 'required|string|max:255',
             'id_bomba_agua' => 'required|exists:bomba_agua,id',
+            'id_ciudad'     => 'required|exists:ciudades,id',
         ];
     }
 }

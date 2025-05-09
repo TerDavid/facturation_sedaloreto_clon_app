@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        <a href="{{ route('bomba-agua.create') }}"
+        <a href="{{ route('bomba-agua.create', ['ciudad_id' => request('ciudad_id')]) }}"
            class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">
             Nueva Bomba
         </a>
@@ -38,9 +38,9 @@
                                 {{ $b->ciudad->nombre }}
                             </td>
                             <td class="px-6 py-4 text-center space-x-2">
-                                <a href="{{ route('bomba-agua.show', $b) }}"
-                                   class="font-medium text-white hover:underline">Ver</a>
-                                <a href="{{ route('bomba-agua.edit', $b) }}"
+                                {{-- <a href="{{ route('bomba-agua.show', ['bomba_agua' => $b->id, 'ciudad_id' => request('ciudad_id')]) }}"
+                                   class="font-medium text-white hover:underline">Ver</a> --}}
+                                <a href="{{ route('bomba-agua.edit', ['bomba_agua' => $b->id, 'ciudad_id' => request('ciudad_id')]) }}"
                                    class="font-medium text-white hover:underline">Editar</a>
                                 <form action="{{ route('bomba-agua.destroy', $b) }}"
                                       method="POST" class="inline">

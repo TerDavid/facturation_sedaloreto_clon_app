@@ -12,10 +12,11 @@
             </div>
         @endif
 
-        <a href="{{ route('reservorio.create') }}"
-           class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">
-            Nuevo Reservorio
-        </a>
+        <a href="{{ route('reservorio.create', ['ciudad_id' => request('ciudad_id')]) }}"
+            class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">
+             Nuevo Reservorio
+         </a>
+
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100">
@@ -42,10 +43,12 @@
                                 {{ $r->bomba->ciudad->nombre ?? '—' }}
                             </td>
                             <td class="px-6 py-4 text-center space-x-2">
-                                <a href="{{ route('reservorio.show', $r) }}"
-                                   class="font-medium text-white hover:underline">Ver</a>
-                                <a href="{{ route('reservorio.edit', $r) }}"
-                                   class="font-medium text-white hover:underline">Editar</a>
+                                {{-- <a href="{{ route('reservorio.show', ['reservorio' => $r->id, 'ciudad_id' => request('ciudad_id')]) }}"
+                                    class="font-medium text-white hover:underline">Ver</a> --}}
+
+                                 <a href="{{ route('reservorio.edit', ['reservorio' => $r->id, 'ciudad_id' => request('ciudad_id')]) }}"
+                                    class="font-medium text-white hover:underline">Editar</a>
+
                                 <form action="{{ route('reservorio.destroy', $r) }}"
                                       method="POST" class="inline">
                                     @csrf @method('DELETE')

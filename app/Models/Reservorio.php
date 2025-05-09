@@ -14,11 +14,17 @@ class Reservorio extends Model
     protected $fillable = [
         'reservorio',
         'id_bomba_agua',
+        'id_ciudad',
     ];
 
     public function bomba()
     {
-        return $this->belongsTo(\App\Models\BombaAgua::class, 'id_bomba_agua');
+        return $this->belongsTo(BombaAgua::class, 'id_bomba_agua');
+    }
+
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class, 'id_ciudad');
     }
 
     public function sectores()
@@ -26,3 +32,4 @@ class Reservorio extends Model
         return $this->hasMany(Sector::class, 'id_reservorio');
     }
 }
+

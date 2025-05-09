@@ -10,29 +10,21 @@
             @csrf
             @method('PUT')
 
-            {{-- Campo: Nombre del sector --}}
+            {{-- Nombre --}}
             <div class="mb-5">
                 <label for="sector" class="block mb-2 text-sm font-medium text-gray-900">Nombre del Sector</label>
-                <input
-                    type="text"
-                    name="sector"
-                    id="sector"
-                    value="{{ old('sector', $sector->sector) }}"
-                    class="block w-full p-3 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"
-                >
+                <input type="text" name="sector" id="sector" value="{{ old('sector', $sector->sector) }}"
+                       class="block w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-base focus:ring-blue-500 focus:border-blue-500">
                 @error('sector')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Campo: Selección de reservorio --}}
+            {{-- Reservorio --}}
             <div class="mb-5">
                 <label for="id_reservorio" class="block mb-2 text-sm font-medium text-gray-900">Reservorio</label>
-                <select
-                    name="id_reservorio"
-                    id="id_reservorio"
-                    class="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                >
+                <select name="id_reservorio" id="id_reservorio"
+                        class="block w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500">
                     @foreach($reservorios as $r)
                         <option value="{{ $r->id }}"
                                 {{ old('id_reservorio', $sector->id_reservorio) == $r->id ? 'selected' : '' }}>
@@ -45,12 +37,16 @@
                 @enderror
             </div>
 
+            {{-- Bomba de agua (oculta) --}}
+            <input type="hidden" name="id_bomba_agua" value="{{ $sector->id_bomba_agua }}">
+
+            {{-- Ciudad (oculta) --}}
+            <input type="hidden" name="id_ciudad" value="{{ $sector->id_ciudad }}">
+
             {{-- Botón --}}
             <div class="mt-6">
-                <button
-                    type="submit"
-                    class="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-lg transition"
-                >
+                <button type="submit"
+                        class="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-lg transition">
                     Actualizar
                 </button>
             </div>

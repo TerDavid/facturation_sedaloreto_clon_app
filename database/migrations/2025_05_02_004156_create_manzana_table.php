@@ -6,15 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('manzana', function (Blueprint $table) {
             $table->id();
 
-            // Nombre o código de la manzana (acepta texto y números)
+            // Nombre o código de la manzana
             $table->string('manzana');
 
             // Relación foránea a la tabla sector
@@ -23,13 +20,28 @@ return new class extends Migration
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
+            // Relación foránea a la tabla reservorio
+            $table->foreignId('id_reservorio')
+                  ->constrained('reservorio')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
+            // Relación foránea a la tabla bomba_agua
+            $table->foreignId('id_bomba_agua')
+                  ->constrained('bomba_agua')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
+            // Relación foránea a la tabla ciudades
+            $table->foreignId('id_ciudad')
+                  ->constrained('ciudades')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('manzana');

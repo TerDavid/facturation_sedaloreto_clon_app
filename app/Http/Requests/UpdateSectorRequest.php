@@ -16,6 +16,8 @@ class UpdateSectorRequest extends FormRequest
         return [
             'sector'         => 'required|string|max:255',
             'id_reservorio'  => 'required|exists:reservorio,id',
+            'id_bomba_agua'  => 'required|exists:bomba_agua,id',
+            'id_ciudad'      => 'required|exists:ciudades,id',
         ];
     }
 }

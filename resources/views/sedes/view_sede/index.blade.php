@@ -9,18 +9,19 @@
         {{-- Botones para crear nuevos registros --}}
         <div class="flex flex-col items-start space-y-4 mb-6
                     md:flex-row md:space-x-4 md:space-y-0 md:items-center">
-            <a href="{{ route('sector.index') }}"
-               class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
-                Crear Sector
-            </a>
-            <a href="{{ route('reservorio.index') }}"
-               class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
-                Crear Reservorio
-            </a>
-            <a href="{{ route('bomba-agua.index') }}"
-               class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
-                Crear Bomba
-            </a>
+                    <a href="{{ route('sector.create', ['ciudad_id' => request('ciudad_id')]) }}"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                         Crear Sector
+                     </a>
+                     <a href="{{ route('reservorio.index', ['ciudad_id' => request('ciudad_id')]) }}"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
+                         Crear Reservorio
+                     </a>
+                     <a href="{{ route('bomba-agua.create', ['ciudad_id' => request('ciudad_id')]) }}"
+                        class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
+                         Crear Bomba
+                     </a>
+
         </div>
 
         {{-- Tabla con nuevo estilo --}}

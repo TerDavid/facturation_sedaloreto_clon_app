@@ -74,7 +74,6 @@
         Facturación
       </span>
     </a>
-
     {{-- Mantenimiento --}}
     <a href="{{ route('sede.index') }}"
        class="group flex items-center justify-start px-4 py-2 hover:bg-gray-100"
@@ -93,7 +92,7 @@
        class="group flex items-center justify-start px-4 py-2 hover:bg-gray-100"
        :class="!sidebarOpen && 'justify-center px-2'"
     >
-      <svg class="w-6 h-6 text-white group-hover=text-black" fill="currentColor" viewBox="0 0 20 20">
+      <svg class="w-6 h-6 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 20 20">
         <path d="M10 2a4 4 0 100 8 4 4 0 000-8z"/>
         <path fill-rule="evenodd" d="M.458 18a8 8 0 0115.084 0A9.718 9.718 0 0110 20c-2.577 0-4.924-.784-6.542-2.058z" clip-rule="evenodd"/>
       </svg>
