@@ -27,20 +27,25 @@ class SectorController extends Controller
 
         // Sin filtro: devuelvo la MISMA vista de sedes (view_sede)
         $sectores = $query->paginate(10);
-        return view('sedes.sector.index', compact('sectores'));
+        return view('sedes.view_sede.index', compact('sectores'));
     }
 
     public function create()
     {
-        $reservorios = Reservorio::all();
-        return view('sedes.sector.create', compact('reservorios'));
+        $ciudadId = request('ciudad_id');
+        $reservorios = Reservorio::with('bomba.ciudad')
+                        ->whereHas('bomba', fn($q) => $q->where('id_ciudades', $ciudadId))
+                        ->get();
+        $ciudad = \App\Models\Ciudad::findOrFail($ciudadId);
+        return view('sedes.sector.create', compact('reservorios', 'ciudadId', 'ciudad'));
     }
 
-    public function store(StoreSectorRequest $request)
+
+   public function store(StoreSectorRequest $request)
     {
         Sector::create($request->validated());
         return redirect()
-            ->route('sector.index')
+            ->route('sector.index', ['ciudad_id' => $request->id_ciudad])
             ->with('success', 'Sector creado correctamente.');
     }
 
@@ -51,15 +56,18 @@ class SectorController extends Controller
 
     public function edit(Sector $sector)
     {
-        $reservorios = Reservorio::all();
-        return view('sedes.sector.edit', compact('sector','reservorios'));
+        $ciudadId = $sector->id_ciudad;
+        $reservorios = Reservorio::with('bomba.ciudad')
+                        ->whereHas('bomba', fn($q) => $q->where('id_ciudades', $ciudadId))
+                        ->get();
+        return view('sedes.sector.edit', compact('sector', 'reservorios', 'ciudadId'));
     }
 
     public function update(UpdateSectorRequest $request, Sector $sector)
     {
         $sector->update($request->validated());
         return redirect()
-            ->route('sector.index')
+            ->route('sector.index', ['ciudad_id' => $request->id_ciudad])
             ->with('success', 'Sector actualizado correctamente.');
     }
 

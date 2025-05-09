@@ -1,31 +1,44 @@
 <x-app-layout>
     <x-slot name="header">
-      <h2 class="text-xl text-white">Seleccione Ciudad</h2>
+        <h2 class="font-bold text-4xl text-black dark:text-black leading-tight">
+            {{ __('Seleccione ciudad') }}
+        </h2>
     </x-slot>
 
     <div class="p-6 space-y-4">
-     <a href="{{ route('sede.sectores') }}"
-        class="inline-block px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">
-       Ver Todos los Sectores
-     </a>
+         {{-- <a href="{{ route('sector.index') }}"
+         class="inline-block px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">
+        Ver Todos los Sectores
+      </a> --}}
 
-      <div class="w-full overflow-x-auto">
-        <table class="w-full table-auto bg-gray-800 text-white rounded whitespace-nowrap">
-          <thead>
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100">
+          <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
             <tr>
-              <th class="px-4 py-2 text-center">ID</th>
-              <th class="px-4 py-2 text-center">Ciudad</th>
-              <th class="px-4 py-2 text-center">Acciones</th>
+              <th scope="col" class="px-6 py-3">
+                ID
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Ciudad
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
             @foreach($ciudades as $ciudad)
-              <tr class="border-b border-gray-700">
-                <td class="px-4 py-2 text-center">{{ $ciudad->id }}</td>
-                <td class="px-4 py-2 text-center">{{ $ciudad->nombre }}</td>
-                <td class="px-4 py-2 text-center">
+              <tr class="bg-blue-500 border-b border-blue-400">
+                <th scope="row"
+                    class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
+                  {{ $ciudad->id }}
+                </th>
+                <td class="px-6 py-4">
+                  {{ $ciudad->nombre }}
+                </td>
+                <td class="px-6 py-4">
                   <a href="{{ route('sector.index', ['ciudad_id' => $ciudad->id]) }}"
-                     class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                     class="font-medium text-white hover:underline">
                     Ver Sectores
                   </a>
                 </td>

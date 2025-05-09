@@ -20,6 +20,12 @@ return new class extends Migration
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
+            // Relación foránea a la tabla ciudades
+            $table->foreignId('id_ciudad')
+                  ->constrained('ciudades')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
