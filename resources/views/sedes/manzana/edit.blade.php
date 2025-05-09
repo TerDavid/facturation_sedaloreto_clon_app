@@ -22,24 +22,20 @@
                 @enderror
             </div>
 
-            {{-- Campo: Sector --}}
+            {{-- Sector (oculto) --}}
+            <input type="hidden" name="id_sector" value="{{ $sector->id }}">
+
             <div class="mb-5">
-                <label for="id_sector" class="block mb-2 text-sm font-medium text-gray-900">Sector</label>
-                <select name="id_sector" id="id_sector"
-                        class="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                        required>
-                    <option value="">-- Seleccionar --</option>
-                    @foreach($sectores as $sector)
-                        <option value="{{ $sector->id }}"
-                            {{ old('id_sector', $manzana->id_sector) == $sector->id ? 'selected' : '' }}>
-                            {{ $sector->sector }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('id_sector')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
+                <label class="block mb-2 text-sm font-medium text-gray-900">Sector</label>
+                <div class="block w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg text-base">
+                    {{ $sector->sector }}
+                </div>
             </div>
+
+            {{-- Campos ocultos --}}
+            <input type="hidden" name="id_reservorio" value="{{ $reservorio->id }}">
+            <input type="hidden" name="id_bomba_agua" value="{{ $bomba->id }}">
+            <input type="hidden" name="id_ciudad" value="{{ $ciudad->id }}">
 
             {{-- Botón --}}
             <div class="mt-6">

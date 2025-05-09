@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-4xl text-black dark:text-black leading-tight">
-            {{ __('Sectores') }}
+            {{ __('Sectores de la ciudad: ') }} {{ $ciudad->nombre }}
         </h2>
     </x-slot>
 
