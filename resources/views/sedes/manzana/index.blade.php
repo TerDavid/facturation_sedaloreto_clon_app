@@ -7,7 +7,7 @@
 
     <div class="p-6">
         <a href="{{ route('manzana.create', ['sector_id' => request('sector_id')]) }}"
-           class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
+           class="px-4 py-2 bg-blue-600 hover:bg-green-700 text-white rounded">
             Crear Manzana
         </a>
 
