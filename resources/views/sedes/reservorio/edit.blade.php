@@ -6,8 +6,7 @@
     </x-slot>
 
     <div class="p-6 bg-white">
-        <form action="{{ route('reservorio.update', $reservorio) }}"
-              method="POST" class="max-w-md mx-auto">
+        <form action="{{ route('reservorio.update', $reservorio) }}" method="POST" class="max-w-md mx-auto">
             @csrf
             @method('PUT')
 
@@ -22,14 +21,17 @@
                 @enderror
             </div>
 
-            {{-- Campo: Selección de bomba --}}
+            {{-- Campo oculto ciudad --}}
+            <input type="hidden" name="id_ciudad" value="{{ $reservorio->id_ciudad }}">
+
+            {{-- Campo: Selección de bomba según ciudad --}}
             <div class="mb-5">
                 <label for="id_bomba_agua" class="block mb-2 text-sm font-medium text-gray-900">Bomba de Agua</label>
                 <select name="id_bomba_agua" id="id_bomba_agua"
                         class="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                    @foreach($bombas as $b)
+                    @foreach($bombas->where('id_ciudades', $reservorio->id_ciudad) as $b)
                         <option value="{{ $b->id }}"
-                                {{ old('id_bomba_agua', $reservorio->id_bomba_agua) == $b->id ? 'selected' : '' }}>
+                            {{ old('id_bomba_agua', $reservorio->id_bomba_agua) == $b->id ? 'selected' : '' }}>
                             {{ $b->bomba }} — {{ $b->ciudad->nombre }}
                         </option>
                     @endforeach

@@ -20,21 +20,13 @@
                 @enderror
             </div>
 
-            {{-- Campo: Ciudad --}}
+            {{-- Campo: Ciudad (oculto + texto fijo) --}}
+            <input type="hidden" name="id_ciudades" value="{{ $ciudadId }}">
             <div class="mb-5">
-                <label for="id_ciudades" class="block mb-2 text-sm font-medium text-gray-900">Ciudad</label>
-                <select name="id_ciudades" id="id_ciudades"
-                        class="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">-- Selecciona ciudad --</option>
-                    @foreach($ciudades as $c)
-                        <option value="{{ $c->id }}" {{ old('id_ciudades') == $c->id ? 'selected' : '' }}>
-                            {{ $c->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('id_ciudades')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
+                <label class="block mb-2 text-sm font-medium text-gray-900">Ciudad</label>
+                <div class="p-3 bg-gray-100 border rounded-lg text-gray-800">
+                    {{ \App\Models\Ciudad::find($ciudadId)->nombre ?? '—' }}
+                </div>
             </div>
 
             {{-- Botón --}}
