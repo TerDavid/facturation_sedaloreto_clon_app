@@ -1,7 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-      <h2 class="text-xl text-white">Editar Sector</h2>
+        <h2 class="font-bold text-4xl text-black dark:text-black leading-tight">
+            {{ __('Editar Sector') }}
+        </h2>
     </x-slot>
+
 
     <div class="p-6 space-y-4">
       <form action="{{ route('sector.update',$sector) }}"

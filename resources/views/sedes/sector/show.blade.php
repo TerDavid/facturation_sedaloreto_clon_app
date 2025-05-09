@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-      <h2 class="text-xl text-white">Detalle de Sector</h2>
+        <h2 class="font-bold text-4xl text-black dark:text-black leading-tight">
+            {{ __('Detalle de Sectores') }}
+        </h2>
     </x-slot>
 
     <div class="p-6 space-y-4 text-white">
