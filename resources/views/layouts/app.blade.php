@@ -23,7 +23,8 @@
     </script>
 </head>
 
-<body class="font-sans antialiased h-screen overflow-hidden @isset($current_view){{ $current_view }}@endisset">
+<body
+    class="font-sans antialiased h-screen overflow-hidden @isset($current_view){{ $current_view }}@endisset">
     <div
         class="page-loader bg-background fixed inset-0 z-[100] flex items-center justify-center transition-opacity opacity-0 hidden">
         <div class="loader-spinner !w-14"></div>
@@ -37,11 +38,13 @@
             <div
                 class="relative h-full [--color-nav-foreground:var(--color-background)] dark:[--color-nav-foreground:var(--color-foreground)]">
                 <div class="h-full overflow-x-hidden">
+
                     <div
                         class="content__scroll-area relative z-20 -mr-7 h-full overflow-y-auto pl-4 pr-11 transition-[margin] duration-200 xl:pl-0">
                         @include('layouts.navigation')
                         <!-- Page Content -->
                         <div class="-mt-5">
+
                             {{ $slot }}
                         </div>
                     </div>
@@ -49,7 +52,9 @@
             </div>
         </div>
     </div>
+    @vite(['resources/js/utils.js'])
     <script src="{{ asset('js/vendor/dom.js') }}"></script>
+    <script src="{{ asset('js/vendor/lucide.js') }}"></script>
     <script src="{{ asset('js/vendor/simplebar.js') }}"></script>
     <script src="{{ asset('js/vendor/enigma.js') }}"></script>
     @yield('scripts')

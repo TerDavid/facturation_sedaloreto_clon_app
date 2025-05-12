@@ -12,6 +12,7 @@ use App\Http\Controllers\MedidorController;
 use App\Http\Controllers\GestionClienteController;
 use App\Http\Controllers\GestionFacturacionController;
 use App\Http\Controllers\ConsultaFacturaController;
+use App\Http\Controllers\GestionController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\SectorRelationController;
 use App\Http\Controllers\TecnicoController;
@@ -26,11 +27,11 @@ use App\Http\Controllers\TecnicoController;
 
 // GET "/" → muestra el formulario con la lista de ciudades
 Route::get('/', [ConsultaFacturaController::class, 'index'])
-     ->name('home');
+    ->name('home');
 
 // POST "/" → procesa el formulario y vuelve a welcome.blade.php
 Route::post('/', [ConsultaFacturaController::class, 'consultar'])
-     ->name('consulta-factura.consultar');
+    ->name('consulta-factura.consultar');
 
 /*
 |--------------------------------------------------------------------------
@@ -70,13 +71,13 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('sede', [SectorRelationController::class, 'index'])
-         ->name('sede.index');
+        ->name('sede.index');
     Route::get('sede/sectores', [SectorRelationController::class, 'sectores'])
-         ->name('sede.sectores');
+        ->name('sede.sectores');
 
 
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Gestión de Clientes 2
     |--------------------------------------------------------------------------
@@ -84,49 +85,47 @@ Route::middleware('auth')->group(function () {
     Route::prefix('clientes/gestion')
         ->name('gestion_clientes2.')
         ->controller(GestionClienteController::class)
-        ->group(function(){
+        ->group(function () {
             Route::get('/',              'index2')->name('index2');
-
-    });
+        });
 
     Route::prefix('medidores/gestion')
         ->name('gestion_medidores.')
         ->controller(MedidorController::class)
-        ->group(function(){
+        ->group(function () {
             Route::get('/',              'indexSelectCity')->name('index');
-
-    });
+        });
 
     /*
     |--------------------------------------------------------------------------
     | Clientes y Medidores
     |--------------------------------------------------------------------------
     */
-    Route::get('clientes', [ClienteController::class,'index'])
-         ->name('clientes.index');
-    Route::get('clientes/ciudad', [ClienteController::class,'indexSelectCity'])
-         ->name('clientes.indexSelectCity');
-    Route::get('clientes/{ciudad}', [ClienteController::class,'show'])
-         ->name('clientes.show');
+    Route::get('clientes', [ClienteController::class, 'index'])
+        ->name('clientes.index');
+    Route::get('clientes/ciudad', [ClienteController::class, 'indexSelectCity'])
+        ->name('clientes.indexSelectCity');
+    Route::get('clientes/{ciudad}', [ClienteController::class, 'show'])
+        ->name('clientes.show');
 
     // 1️⃣ Sectores de la ciudad
-    Route::get('clientes/{ciudad}/sectores', [MedidorController::class,'sectores'])
-         ->name('medidores.sectores');
+    Route::get('clientes/{ciudad}/sectores', [MedidorController::class, 'sectores'])
+        ->name('medidores.sectores');
 
     // 2️⃣ Medidores de un sector
-    Route::get('clientes/{ciudad}/sectores/{sector}/medidores', [MedidorController::class,'index'])
-         ->name('medidores.index');
+    Route::get('clientes/{ciudad}/sectores/{sector}/medidores', [MedidorController::class, 'index'])
+        ->name('medidores.index');
 
     // CRUD de medidores
     Route::prefix('clientes/{ciudad}/sectores/{sector}/medidores')
-         ->name('medidores.')
-         ->group(function(){
-             Route::get('create',  [MedidorController::class,'create'])->name('create');
-             Route::post('/',      [MedidorController::class,'store'])->name('store');
-             Route::get('{medidor}/edit', [MedidorController::class,'edit'])->name('edit');
-             Route::put('{medidor}',      [MedidorController::class,'update'])->name('update');
-             Route::delete('{medidor}',   [MedidorController::class,'destroy'])->name('destroy');
-         });
+        ->name('medidores.')
+        ->group(function () {
+            Route::get('create',  [MedidorController::class, 'create'])->name('create');
+            Route::post('/',      [MedidorController::class, 'store'])->name('store');
+            Route::get('{medidor}/edit', [MedidorController::class, 'edit'])->name('edit');
+            Route::put('{medidor}',      [MedidorController::class, 'update'])->name('update');
+            Route::delete('{medidor}',   [MedidorController::class, 'destroy'])->name('destroy');
+        });
 
     /*
     |--------------------------------------------------------------------------
@@ -136,14 +135,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('clientes/{ciudad}/gestion')
         ->name('gestion_clientes.')
         ->controller(GestionClienteController::class)
-        ->group(function(){
+        ->group(function () {
             Route::get('/',              'index')->name('index');
             Route::get('create',         'create')->name('create');
             Route::post('/',             'store')->name('store');
             Route::get('{cliente}/edit', 'edit')->name('edit');
             Route::put('{cliente}',      'update')->name('update');
             Route::delete('{cliente}',   'destroy')->name('destroy');
-    });
+        });
 
 
     /*
@@ -152,27 +151,42 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::prefix('clientes/{ciudad}/facturacion')
-         ->name('facturacion.')
-         ->controller(GestionFacturacionController::class)
-         ->group(function(){
-             Route::get('sectores',                         'sectores')->name('sectores');
-             Route::get('sectores/{sector}/clientes',       'clientes')->name('clientes');
-             Route::get('sectores/{sector}/create',         'create')->name('create');
-             Route::post('sectores/{sector}',               'store')->name('store');
-             Route::get('sectores/{sector}/{factura}/edit', 'edit')->name('edit');
-             Route::put('sectores/{sector}/{factura}',      'update')->name('update');
-             Route::delete('sectores/{sector}/{factura}',   'destroy')->name('destroy');
-         });
+        ->name('facturacion.')
+        ->controller(GestionFacturacionController::class)
+        ->group(function () {
+            Route::get('sectores',                         'sectores')->name('sectores');
+            Route::get('sectores/{sector}/clientes',       'clientes')->name('clientes');
+            Route::get('sectores/{sector}/create',         'create')->name('create');
+            Route::post('sectores/{sector}',               'store')->name('store');
+            Route::get('sectores/{sector}/{factura}/edit', 'edit')->name('edit');
+            Route::put('sectores/{sector}/{factura}',      'update')->name('update');
+            Route::delete('sectores/{sector}/{factura}',   'destroy')->name('destroy');
+        });
 
 
-         Route::view('tecnico', 'tecnico.index')->name('tecnico.index');
-        Route::view('tecnico/create', 'tecnico.create')->name('tecnico.create');
-        Route::view('tecnico/assign', 'tecnico.assign')->name('tecnico.assign');
-        Route::post('tecnico', [TecnicoController::class, 'store'])->name('tecnico.store');
+    Route::view('tecnico', 'tecnico.index')->name('tecnico.index');
+    Route::view('tecnico/create', 'tecnico.create')->name('tecnico.create');
+    Route::view('tecnico/assign', 'tecnico.assign')->name('tecnico.assign');
+    Route::post('tecnico', [TecnicoController::class, 'store'])->name('tecnico.store');
 
-        Route::resource('tecnico', TecnicoController::class);
+    Route::resource('tecnico', TecnicoController::class);
 
-
+    Route::prefix('gestion')
+        ->name('gestion.')
+        // ->controller(GestionController::class)
+        ->group(function () {
+            Route::prefix('clientes')
+                ->name('clientes.')
+                ->controller(GestionClienteController::class)
+                ->group(function () {
+                    Route::get('/', 'index2')->name('index');
+                    Route::get('create', 'create')->name('create');
+                    Route::post('store', 'store')->name('store');
+                });
+            // Route::get('clientes/create', 'clientes')->name('clientes');
+            // Route::get('clientes', 'clientes_create')->name('clientes.create');
+        });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/api.php';

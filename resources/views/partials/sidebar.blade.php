@@ -80,13 +80,12 @@ $menu = [
         'children' => [
             [
                 'title' => 'Registrar nuevo cliente',
-                'url' => route('clientes.indexSelectCity'),
+                'route' => 'gestion.clientes.create',
                 'icon' => 'default',
             ],
             [
                 'title' => 'Listado de clientes',
-                'url' => route('gestion_clientes2.index2'),
-                'route' => 'gestion_clientes2.index2',
+                'route' => 'gestion.clientes.index',
                 'icon' => 'default',
             ],
         ],

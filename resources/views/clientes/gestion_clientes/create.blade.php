@@ -2,16 +2,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold text-white">
-            Registrar cliente en {{ $ciudad->nombre }}
+            Registrar cliente en
         </h2>
     </x-slot>
     <div class="mt-8 flex items-center">
-        <h2 class="mr-auto text-lg font-medium"> Registrar cliente en {{ $ciudad->nombre }}</h2>
+        <h2 class="mr-auto text-lg font-medium"> Registrar cliente</h2>
     </div>
+
     <div
-        class="mt-4 p-6 max-w-4xl mx-auto  box relative p-5 before:absolute before:inset-0 before:mx-3 before:-mb-3 before:border before:border-foreground/10 before:bg-background/30 before:shadow-[0px_3px_5px_#0000000b] before:z-[-1] before:rounded-xl after:absolute after:inset-0 after:border after:border-foreground/10 after:bg-background after:shadow-[0px_3px_5px_#0000000b] after:rounded-xl after:z-[-1] after:backdrop-blur-md">
+        class="mt-4 p-6 max-w-4xl   box relative p-5 before:absolute before:inset-0 before:mx-3 before:-mb-3 before:border before:border-foreground/10 before:bg-background/30 before:shadow-[0px_3px_5px_#0000000b] before:z-[-1] before:rounded-xl after:absolute after:inset-0 after:border after:border-foreground/10 after:bg-background after:shadow-[0px_3px_5px_#0000000b] after:rounded-xl after:z-[-1] after:backdrop-blur-md">
         {{-- 1) Selector de sector --}}
-        <form method="GET" action="{{ route('gestion_clientes.create', $ciudad) }}"
+        {{-- <form method="GET" action="{{ route('gestion_clientes.create', $ciudad) }}"
             class="mb-6 flex items-end space-x-4">
             @csrf
             <div class="w-1/3">
@@ -19,7 +20,7 @@
                 <x-form.label for="sector_id">
                     Elige primero un sector
                 </x-form.label>
-                <x-form.select id="sector_id" name="sector_id" onchange="this.form.submit()"
+                <x-form.select id="sector_id" name="sector_id" onselect="onChangeCiudad(event)"
                     class="mt-1 block w-full   rounded">
                     <option value="">-- selecciona sector --</option>
                     @foreach ($sectores as $s)
@@ -32,34 +33,76 @@
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
                 Continuar
             </button>
-        </form>
+        </form> --}}
 
-        @if (request('sector_id'))
+
+        @if (true)
             {{-- 2) Formulario completo --}}
-            <form method="POST" action="{{ route('gestion_clientes.store', $ciudad) }}">
+            <form method="POST" id="frm_filter" action="{{ route('gestion.clientes.store') }}">
                 @csrf
 
                 {{-- ocultos básicos --}}
-                <input type="hidden" name="ciudad_id" value="{{ $ciudad->id }}">
-                <input type="hidden" name="sector_id" value="{{ request('sector_id') }}">
+                {{-- <input type="hidden" name="ciudad_id" value="{{ $ciudad->id }}"> --}}
+                {{-- <input type="hidden" name="sector_id" value="{{ request('sector_id') }}"> --}}
 
-                {{-- Estado --}}
-                <div class="mb-4">
-                    <x-form.label for="estado" class="block text-sm font-medium">
-                        Estado
-                    </x-form.label>
-                    <x-form.select id="estado" name="estado" class="mt-1 block w-1/3 rounded">
-                        <option value="1" {{ old('estado') === '1' ? 'selected' : '' }}>Sin deuda</option>
-                        <option value="0" {{ old('estado') === '0' ? 'selected' : '' }}>Inactivo</option>
-                        <option value="2" {{ old('estado') === '2' ? 'selected' : '' }}>Deuda</option>
-                        <option value="3" {{ old('estado') === '3' ? 'selected' : '' }}>Corte</option>
-                    </x-form.select>
-                    @error('estado')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                <div class="grid grid-cols-2 gap-6">
+
+                <div class="md:grid  md:grid-cols-2 flex flex-col  gap-2 md:gap-4">
+                    {{-- Ciudad --}}
+                    <div x-data>
+                        <x-form.label for="ciudad_id">
+                            Seleccionar ciudad
+                        </x-form.label>
+                        <x-form.select x-model="$store.selects.paisSelected" @change="$store.selects.cargarSectores()"
+                            id="ciudad_id" name="ciudad_id" class="mt-1 block w-full rounded">
+                            <option value="">-- selecciona ciudad --</option>
+                            @foreach ($ciudades as $c)
+                                <option value="{{ $c->id }}" {{ old('ciudad_id') == $c->id ? 'selected' : '' }}>
+                                    {{ $c->nombre }}
+                                </option>
+                            @endforeach
+                        </x-form.select>
+                        @error('ciudad_id')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div x-data>
+                        <x-form.label for="sector_id">
+                            Seleccionar sector
+                        </x-form.label>
+                        <x-form.select
+                            @change="$store.selects.cargarManzanas()"
+                            x-model="$store.selects.sectorSelected"
+                            x-bind:disabled="$store.selects.sectores.length === 0" id="sector_id" name="sector_id"
+                            class="mt-1 block w-full rounded">
+                            <option value="">-- selecciona sector --</option>
+                            <template x-for="sector in $store.selects.sectores" :key="sector.id">
+                                <option :value="sector.id" x-text="sector.sector"></option>
+                            </template>
+                        </x-form.select>
+                        @error('sector_id')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                    {{-- Estado --}}
+                    <div>
+                        <x-form.label for="estado">
+                            Estado
+                        </x-form.label>
+                        <x-form.select id="estado" name="estado" class="mt-4 block w-full rounded">
+                            <option value="1" {{ old('estado') === '1' ? 'selected' : '' }}>Sin deuda</option>
+                            <option value="0" {{ old('estado') === '0' ? 'selected' : '' }}>Inactivo</option>
+                            <option value="2" {{ old('estado') === '2' ? 'selected' : '' }}>Deuda</option>
+                            <option value="3" {{ old('estado') === '3' ? 'selected' : '' }}>Corte</option>
+                        </x-form.select>
+                        @error('estado')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div></div>
+
                     {{-- Código de suministro --}}
                     <div>
                         <x-form.label for="codigo_suministro">
@@ -145,18 +188,22 @@
                     </div>
 
                     {{-- Manzana --}}
-                    <div>
+                    <div x-data>
                         <x-form.label for="manzana_id">
                             Manzana
                         </x-form.label>
-                        <x-form.select id="manzana_id" name="manzana_id" class="mt-1 block w-full   rounded">
+                        <x-form.select id="manzana_id" name="manzana_id"
+                            x-bind:disabled="$store.selects.manzanas.length === 0" class="mt-1 block w-full   rounded">
                             <option value="">-- selecciona manzana --</option>
-                            @foreach ($manzanas as $m)
+                            {{-- @foreach ($manzanas as $m)
                                 <option value="{{ $m->id }}"
                                     {{ old('manzana_id') == $m->id ? 'selected' : '' }}>
                                     {{ $m->manzana }}
                                 </option>
-                            @endforeach
+                            @endforeach --}}
+                            <template x-for="manzanas in $store.selects.manzanas" :key="manzanas.id">
+                                <option :value="manzanas.id" x-text="manzanas.manzana"></option>
+                            </template>
                         </x-form.select>
                         @error('manzana_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -188,8 +235,7 @@
                             Tarifa aplicable
                         </x-form.label>
                         <x-form.select id="tarifa_id" name="tarifa_id" class="mt-1 block w-full   rounded"
-                            {{-- :disabled="!old('medidor_id')" --}}
-                            >
+                            {{-- :disabled="!old('medidor_id')" --}}>
                             <option value="">-- selecciona tarifa --</option>
                             @foreach ($tarifas as $t)
                                 <option value="{{ $t->id }}"
@@ -237,4 +283,116 @@
             </form>
         @endif
     </div>
+    @section('scripts')
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.store('selects', {
+                    paisSelected: '',
+                    sectores: [],
+                    sectorSelected: '',
+                    manzanas: [],
+
+                    cargarSectores() {
+                        console.log(this.paisSelected);
+                        this.sectores = [];
+                        // this.sectorSelected = '';
+                        axios.get(`/api/ciudades/${this.paisSelected}/sectores`).then(response => {
+                            console.log(response.data);
+                            this.sectores = response.data;
+                            console.log(this.sectores)
+                            // this.sectorSelected = this.sectores[0].id;
+                        })
+
+                        // this.sectorSelected = this.sectores[0].id;
+                    },
+                    cargarManzanas() {
+                        this.manzanas = [];
+                        // this.manzanaSelected = '';
+                        axios.get(`/api/sector/${this.sectorSelected}/manzanas`).then(response => {
+                            console.log(response.data);
+                            this.manzanas = response.data;
+                            console.log(this.manzanas)
+                            // this.sectorSelected = this.sectores[0].id;
+                        })
+                    }
+                })
+            })
+        </script>
+        <script>
+            // const selectCiudades = () => ({
+            //     options: [],
+            //     selected: null,
+            //     init() {
+            //         this.$watch('selected', value => {
+            //             if (value) {
+            //                 axios.get(`/api/ciudades/${value}/sectores`)
+            //                     .then(response => {
+            //                         this.options = response.data;
+            //                     })
+            //                     .catch(error => {
+            //                         console.error(error);
+            //                     });
+            //             }
+            //         });
+            //     }
+            // })
+            document.addEventListener('DOMContentLoaded', () => {
+                const sectorSelect = document.getElementById('sector_id');
+                const ciudadSelect = document.getElementById('ciudad_id');
+                const manzanaSelect = document.getElementById('manzana_id');
+                const frm = document.getElementById('frm_create');
+                const frm_filter = document.getElementById('frm_filter');
+
+                // Cambiar el valor de ciudad_id al seleccionar un sector
+                // ciudadSelect.addEventListener('change', function() {
+                //     // location.href = `?sector_id=${sectorSelect.value}`;
+                //     // frm_filter.submit()
+                //     // location
+                //     const selectedCiudad = this.options[this.selectedIndex];
+                //     sectorSelect.disabled = true;
+                //     axios.get(`/api/ciudades/${selectedCiudad.value}/sectores`)
+                //         .then(response => {
+                //             console.log(response.data);
+                //             sectorSelect.innerHTML = '<option value="">-- selecciona sector --</option>';
+                //             response.data.forEach(sector => {
+                //                 const option = document.createElement('option');
+                //                 option.value = sector.id;
+                //                 option.textContent = sector.sector;
+                //                 sectorSelect.appendChild(option);
+                //             });
+                //             sectorSelect.disabled = false;
+                //         })
+                //         .catch(error => {
+                //             sectorSelect.disabled = false;
+
+                //         });
+                // });
+                // sectorSelect.addEventListener('change', function() {
+                //     // location.href = `?sector_id=${sectorSelect.value}`;
+                //     // frm_filter.submit()
+                //     // location
+                //     const selectedSector = this.options[this.selectedIndex];
+                //     manzanaSelect.disabled = true;
+                //     axios.get(`/api/sector/${selectedSector.value}/manzanas`)
+                //         .then(response => {
+                //             populateSelect(manzanaSelect, response.data.map(item => {
+                //                 return {
+                //                     id: 'item.id',
+                //                     name: 'item.manzana'
+                //                 }
+                //             }).unshift({
+                //                 id: '',
+                //                 name: '-- Seleccionar manzana --'
+                //             }));
+
+                //             manzanaSelect.disabled = false;
+                //         })
+                //         .catch(error => {
+                //             manzanaSelect.disabled = false;
+
+                //         });
+                // });
+            });
+        </script>
+    @endsection
 </x-app-layout>
