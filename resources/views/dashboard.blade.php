@@ -1,9 +1,7 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-bold text-4xl text-black dark:text-black leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    <div class="mt-8 flex items-center">
+        <h2 class="mr-auto text-lg font-medium">Dashboard</h2>
+    </div>
 
 
     <div class="py-[5vh] px-[5vw]">

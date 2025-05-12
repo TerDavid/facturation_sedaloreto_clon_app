@@ -19,7 +19,12 @@ class GestionClienteController extends Controller
     public function index(Ciudad $ciudad)
     {
         $clientes = Cliente::where('ciudad_id', $ciudad->id)->get();
-        return view('clientes.gestion_clientes.index', compact('ciudad','clientes'));
+        return view('clientes.gestion_clientes.index', compact('ciudad', 'clientes'));
+    }
+    public function index2()
+    {
+        $clientes = Cliente::select()->get();
+        return view('clientes.gestion_clientes.index', compact( 'clientes'));
     }
 
     // 2) Formulario de creación
@@ -43,7 +48,12 @@ class GestionClienteController extends Controller
             : collect();
 
         return view('clientes.gestion_clientes.create', compact(
-            'ciudad','tarifas','medidores','sectores','sector_id','manzanas'
+            'ciudad',
+            'tarifas',
+            'medidores',
+            'sectores',
+            'sector_id',
+            'manzanas'
         ));
     }
 
@@ -53,7 +63,7 @@ class GestionClienteController extends Controller
         Cliente::create($request->validated() + ['ciudad_id' => $ciudad->id]);
         return redirect()
             ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente registrado');
+            ->with('success', 'Cliente registrado');
     }
 
     // 4) Formulario de edición
@@ -74,7 +84,14 @@ class GestionClienteController extends Controller
             : collect();
 
         return view('clientes.gestion_clientes.edit', compact(
-            'ciudad','cliente','tarifas','medidores','sectores','manzanas','sector_id','consumosSM'
+            'ciudad',
+            'cliente',
+            'tarifas',
+            'medidores',
+            'sectores',
+            'manzanas',
+            'sector_id',
+            'consumosSM'
         ));
     }
 
@@ -84,12 +101,12 @@ class GestionClienteController extends Controller
         $cliente->update($request->validated());
         return redirect()
             ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente actualizado');
+            ->with('success', 'Cliente actualizado');
     }
     // 6) Eliminar cliente
     public function destroy(Ciudad $ciudad, Cliente $cliente)
     {
         $cliente->delete();
-        return back()->with('success','Cliente eliminado');
+        return back()->with('success', 'Cliente eliminado');
     }
 }

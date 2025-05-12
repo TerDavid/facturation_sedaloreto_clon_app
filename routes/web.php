@@ -74,6 +74,29 @@ Route::middleware('auth')->group(function () {
     Route::get('sede/sectores', [SectorRelationController::class, 'sectores'])
          ->name('sede.sectores');
 
+
+
+     /*
+    |--------------------------------------------------------------------------
+    | Gestión de Clientes 2
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('clientes/gestion')
+        ->name('gestion_clientes2.')
+        ->controller(GestionClienteController::class)
+        ->group(function(){
+            Route::get('/',              'index2')->name('index2');
+
+    });
+
+    Route::prefix('medidores/gestion')
+        ->name('gestion_medidores.')
+        ->controller(MedidorController::class)
+        ->group(function(){
+            Route::get('/',              'indexSelectCity')->name('index');
+
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Clientes y Medidores
@@ -81,6 +104,8 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('clientes', [ClienteController::class,'index'])
          ->name('clientes.index');
+    Route::get('clientes/ciudad', [ClienteController::class,'indexSelectCity'])
+         ->name('clientes.indexSelectCity');
     Route::get('clientes/{ciudad}', [ClienteController::class,'show'])
          ->name('clientes.show');
 
@@ -119,6 +144,7 @@ Route::middleware('auth')->group(function () {
             Route::put('{cliente}',      'update')->name('update');
             Route::delete('{cliente}',   'destroy')->name('destroy');
     });
+
 
     /*
     |--------------------------------------------------------------------------
