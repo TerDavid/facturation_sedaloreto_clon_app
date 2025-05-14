@@ -33,7 +33,7 @@
                         <th scope="col" class="px-6 py-3">Reservorio</th>
                         <th scope="col" class="px-6 py-3">Bomba de Agua</th>
                         <th scope="col" class="px-6 py-3">Ciudad</th>
-                        <th scope="col" class="px-6 py-3">Detalles</th>
+                        <th scope="col" class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,9 +52,9 @@
                             <td class="px-6 py-4">{{ $sector->reservorio->bomba->bomba }}</td>
                             <td class="px-6 py-4">{{ $sector->reservorio->bomba->ciudad->nombre }}</td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('sector.show', $sector) }}"
+                                <a href="{{ route('sector.edit', $sector) }}"
                                    class="font-medium text-white hover:underline">
-                                    Ver Sector
+                                    Editar Sector
                                 </a>
                             </td>
                         </tr>
