@@ -2,35 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Medidor extends Model
 {
     use HasFactory;
 
-    protected $table = 'medidor';
+    /**
+     * Laravel por convención
+     * habría buscado 'medidors' o 'medidor',
+     * así que forzamos el nombre correcto:
+     */
+    protected $table = 'medidores';
 
+    /**
+     * Campos rellenables.
+     */
     protected $fillable = [
-        'codigo_medidor',
-        'id_sector',
-        'id_manzana',
-        'ciudad_id',
-        'estado_medidor',
+        'cliente_id',
+        'codigo',
+        'fecha_instalacion',
+        'ubicacion_detallada',
     ];
 
-    public function sector()
+    /**
+     * Relación inversa con Cliente.
+     */
+    public function cliente()
     {
-        return $this->belongsTo(Sector::class, 'id_sector');
-    }
-
-    public function manzana()
-    {
-        return $this->belongsTo(Manzana::class, 'id_manzana');
-    }
-
-    public function ciudad()
-    {
-        return $this->belongsTo(Ciudad::class, 'ciudad_id');
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 }

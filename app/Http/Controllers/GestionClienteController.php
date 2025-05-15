@@ -4,92 +4,127 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Ciudad;
-use App\Models\Tarifa;
-use App\Models\Medidor;
 use App\Models\Sector;
 use App\Models\Reservorio;
 use App\Models\Manzana;
+use App\Models\Tarifa;
 use App\Models\ConsumoSinMedidor;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
+use Illuminate\Http\Request;
 
 class GestionClienteController extends Controller
 {
-    // 1) Listado de clientes por ciudad
-    public function index(Ciudad $ciudad)
+    public function index(Request $request)
     {
-        $clientes = Cliente::where('ciudad_id', $ciudad->id)->get();
-        return view('clientes.gestion_clientes.index', compact('ciudad','clientes'));
-    }
+        $ciudades = Ciudad::orderBy('nombre')->get();
 
-    // 2) Formulario de creación
-    public function create(Ciudad $ciudad)
-    {
-        // Tarifas (lista simple, sin agrupar)
-        $tarifas    = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
+        // 🔁 Eliminamos map() y usamos los objetos completos
+        $allSectores = Sector::with('reservorio.bomba')->get();
+        $allManzanas = Manzana::all();
 
-        // Medidores de la ciudad
-        $medidores = Medidor::where('ciudad_id', $ciudad->id)->get();
+        $tarifas  = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
+        $consumos = ConsumoSinMedidor::orderBy('categoria')->get();
 
-        // Sectores de la ciudad (vía bombas → reservorios → sectores)
-        $bombaIds      = $ciudad->bombas()->pluck('id');
-        $reservorioIds = Reservorio::whereIn('id_bomba_agua', $bombaIds)->pluck('id');
-        $sectores      = Sector::whereIn('id_reservorio', $reservorioIds)->get();
+        $ciudadId = $request->get('ciudad_id');
 
-        // Si viene sector_id por GET, cargo también sus manzanas
-        $sector_id = request('sector_id');
-        $manzanas  = $sector_id
-            ? Manzana::where('id_sector', $sector_id)->get()
-            : collect();
+        $clientes = Cliente::with(['manzana.ciudad', 'manzana.sector'])
+            ->when($ciudadId, fn($q) =>
+                $q->whereHas('manzana', fn($qb) =>
+                    $qb->where('id_ciudad', $ciudadId)
+                )
+            )
+            ->orderBy('nombre')
+            ->paginate(10);
 
-        return view('clientes.gestion_clientes.create', compact(
-            'ciudad','tarifas','medidores','sectores','sector_id','manzanas'
+        return view('clientes.gestion_clientes.index', compact(
+            'ciudades', 'allSectores', 'allManzanas',
+            'tarifas', 'consumos', 'clientes'
         ));
     }
 
-    // 3) Guardar nuevo cliente
-    public function store(StoreClienteRequest $request, Ciudad $ciudad)
+    public function store(StoreClienteRequest $req)
     {
-        Cliente::create($request->validated() + ['ciudad_id' => $ciudad->id]);
+        $v = $req->validated();
+
+        $categoria = $req->boolean('crear_medidor')
+            ? Tarifa::find($v['tarifa_id'])->categoria
+            : ConsumoSinMedidor::find($v['consumo_sin_medidor_id'])->categoria;
+
+        $cliente = Cliente::create([
+            'code_suministro'        => $v['code_suministro'],
+            'nombre'                 => $v['nombre'],
+            'direccion'              => $v['direccion'] ?? null,
+            'telefono'               => $v['telefono']  ?? null,
+            'email'                  => $v['email']     ?? null,
+            'id_manzana'             => $v['manzana_id'],
+            'categoria'              => $categoria,
+            'tarifa_id'              => $req->boolean('crear_medidor')
+                                        ? $v['tarifa_id']
+                                        : null,
+            'id_consumo_sin_medidor' => $req->boolean('crear_medidor')
+                                        ? null
+                                        : $v['consumo_sin_medidor_id'],
+        ]);
+
+        if ($req->boolean('crear_medidor')) {
+            $cliente->medidor()->create([
+                'codigo'              => $v['medidor_codigo'],
+                'fecha_instalacion'   => $v['medidor_fecha_instalacion'] ?? null,
+                'ubicacion_detallada' => $v['ubicacion_detallada'] ?? null,
+            ]);
+        }
+
         return redirect()
-            ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente registrado');
+            ->route('gestion_clientes.index')
+            ->with('success', 'Cliente registrado correctamente.');
     }
 
-    // 4) Formulario de edición
-    public function edit(Ciudad $ciudad, Cliente $cliente)
+    public function update(UpdateClienteRequest $req, Cliente $cliente)
     {
-        // 4.1) Sectores
-        $bombaIds      = $ciudad->bombas()->pluck('id');
-        $reservorioIds = Reservorio::whereIn('id_bomba_agua', $bombaIds)->pluck('id');
-        $sectores      = Sector::whereIn('id_reservorio', $reservorioIds)->get();
-        // 4.2) Tarifas, medidores y consumos
-        $tarifas    = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
-        $medidores  = Medidor::where('ciudad_id', $ciudad->id)->get();
-        $consumosSM = ConsumoSinMedidor::all();
-        // 4.3) Sector actual o recién cambiado
-        $sector_id = request('sector_id', $cliente->sector_id);
-        $manzanas  = $sector_id
-            ? Manzana::where('id_sector', $sector_id)->get()
-            : collect();
+        $v = $req->validated();
 
-        return view('clientes.gestion_clientes.edit', compact(
-            'ciudad','cliente','tarifas','medidores','sectores','manzanas','sector_id','consumosSM'
-        ));
-    }
+        $categoria = $req->boolean('crear_medidor')
+            ? Tarifa::find($v['tarifa_id'])->categoria
+            : ConsumoSinMedidor::find($v['consumo_sin_medidor_id'])->categoria;
 
-    // 5) Actualizar cliente
-    public function update(UpdateClienteRequest $request, Ciudad $ciudad, Cliente $cliente)
-    {
-        $cliente->update($request->validated());
+        $cliente->update([
+            'code_suministro'        => $v['code_suministro'],
+            'nombre'                 => $v['nombre'],
+            'direccion'              => $v['direccion'] ?? null,
+            'telefono'               => $v['telefono']  ?? null,
+            'email'                  => $v['email']     ?? null,
+            'id_manzana'             => $v['manzana_id'],
+            'categoria'              => $categoria,
+            'tarifa_id'              => $req->boolean('crear_medidor')
+                                        ? $v['tarifa_id']
+                                        : null,
+            'id_consumo_sin_medidor' => $req->boolean('crear_medidor')
+                                        ? null
+                                        : $v['consumo_sin_medidor_id'],
+        ]);
+
+        if ($req->boolean('crear_medidor')) {
+            $attrs = [
+                'codigo'              => $v['medidor_codigo'],
+                'fecha_instalacion'   => $v['medidor_fecha_instalacion'] ?? null,
+                'ubicacion_detallada' => $v['ubicacion_detallada'] ?? null,
+            ];
+            $cliente->medidor
+                ? $cliente->medidor->update($attrs)
+                : $cliente->medidor()->create($attrs);
+        } else {
+            $cliente->medidor?->delete();
+        }
+
         return redirect()
-            ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente actualizado');
+            ->route('gestion_clientes.index')
+            ->with('success', 'Cliente actualizado correctamente.');
     }
-    // 6) Eliminar cliente
-    public function destroy(Ciudad $ciudad, Cliente $cliente)
+
+    public function destroy(Cliente $cliente)
     {
         $cliente->delete();
-        return back()->with('success','Cliente eliminado');
+        return back()->with('success', 'Cliente eliminado.');
     }
 }

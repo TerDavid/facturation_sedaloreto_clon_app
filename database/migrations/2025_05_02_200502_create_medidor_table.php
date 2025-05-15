@@ -6,47 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('medidor', function (Blueprint $table) {
+        Schema::create('medidores', function (Blueprint $table) {
             $table->id();
 
-            // Código único alfanumérico del medidor
-            $table->string('codigo_medidor')->unique();
-
-            // Relación con sector
-            $table->foreignId('id_sector')
-                  ->constrained('sector')
+            // Relación al cliente (ya con su ubicación y categoría)
+            $table->foreignId('cliente_id')
+                  ->constrained('clientes')
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
-            // Relación con manzana
-            $table->foreignId('id_manzana')
-                  ->constrained('manzana')
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
-
-            // Relación con ciudad
-            $table->foreignId('ciudad_id')
-                  ->constrained('ciudades')
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
-
-            // Estado del medidor: 0, 1 o 2 (por defecto 1)
-            $table->tinyInteger('estado_medidor')->default(1);
+            // Datos del medidor
+            $table->string('codigo')->unique();
+            $table->date('fecha_instalacion')->nullable();
+            $table->string('ubicacion_detallada')->nullable();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('medidor');
+        Schema::dropIfExists('medidores');
     }
 };

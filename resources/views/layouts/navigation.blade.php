@@ -50,7 +50,7 @@
     </a>
 
     {{-- Clientes --}}
-    <a href="{{ route('clientes.index') }}"
+    <a href="{{ route('gestion_clientes.index') }}"
        class="group flex items-center justify-start px-4 py-2 hover:bg-gray-100"
        :class="!sidebarOpen && 'justify-center px-2'"
     >
