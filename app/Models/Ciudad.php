@@ -33,6 +33,10 @@ class Ciudad extends Model
     {
         return $this->hasMany(Reservorio::class, 'id_ciudades');
     }
+    public function sectores2()
+    {
+        return $this->hasMany(Sector::class, 'id_ciudad');
+    }
 
     /**
      * Todos los sectores de esta ciudad, a través de sus reservorios.

@@ -19,14 +19,27 @@ class GestionClienteController extends Controller
     public function index(Ciudad $ciudad)
     {
         $clientes = Cliente::where('ciudad_id', $ciudad->id)->get();
-        return view('clientes.gestion_clientes.index', compact('ciudad','clientes'));
+        return view('clientes.gestion_clientes.index', compact('ciudad', 'clientes'));
+    }
+    public function index2()
+    {
+        $clientes = Cliente::select()->get();
+        return view('clientes.gestion_clientes.index', compact('clientes'));
     }
 
     // 2) Formulario de creación
-    public function create(Ciudad $ciudad)
+    public function create()
     {
+        $ciudad = Ciudad::find(1);
+        $ciudades = Ciudad::all();
         // Tarifas (lista simple, sin agrupar)
         $tarifas    = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
+        $ciudad_id = request('ciudad_id');
+        if ($ciudad_id) {
+            $ciudad = Ciudad::find($ciudad_id);
+        } else {
+            $ciudad = Ciudad::first();
+        }
 
         // Medidores de la ciudad
         $medidores = Medidor::where('ciudad_id', $ciudad->id)->get();
@@ -34,7 +47,7 @@ class GestionClienteController extends Controller
         // Sectores de la ciudad (vía bombas → reservorios → sectores)
         $bombaIds      = $ciudad->bombas()->pluck('id');
         $reservorioIds = Reservorio::whereIn('id_bomba_agua', $bombaIds)->pluck('id');
-        $sectores      = Sector::whereIn('id_reservorio', $reservorioIds)->get();
+        // $sectores      = Sector::whereIn('id_reservorio', $reservorioIds)->get();
 
         // Si viene sector_id por GET, cargo también sus manzanas
         $sector_id = request('sector_id');
@@ -43,17 +56,24 @@ class GestionClienteController extends Controller
             : collect();
 
         return view('clientes.gestion_clientes.create', compact(
-            'ciudad','tarifas','medidores','sectores','sector_id','manzanas'
+            'ciudad',
+            'tarifas',
+            'medidores',
+            // 'sectores',
+            'ciudades',
+            'sector_id',
+            'manzanas'
         ));
     }
 
     // 3) Guardar nuevo cliente
-    public function store(StoreClienteRequest $request, Ciudad $ciudad)
+    public function store(StoreClienteRequest $request)
     {
-        Cliente::create($request->validated() + ['ciudad_id' => $ciudad->id]);
+        // dd($request->post());
+        Cliente::create($request->validated());
         return redirect()
-            ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente registrado');
+            ->route('gestion.clientes.index')
+            ->with('success', 'Cliente registrado');
     }
 
     // 4) Formulario de edición
@@ -74,7 +94,14 @@ class GestionClienteController extends Controller
             : collect();
 
         return view('clientes.gestion_clientes.edit', compact(
-            'ciudad','cliente','tarifas','medidores','sectores','manzanas','sector_id','consumosSM'
+            'ciudad',
+            'cliente',
+            'tarifas',
+            'medidores',
+            'sectores',
+            'manzanas',
+            'sector_id',
+            'consumosSM'
         ));
     }
 
@@ -84,12 +111,12 @@ class GestionClienteController extends Controller
         $cliente->update($request->validated());
         return redirect()
             ->route('gestion_clientes.index', $ciudad)
-            ->with('success','Cliente actualizado');
+            ->with('success', 'Cliente actualizado');
     }
     // 6) Eliminar cliente
     public function destroy(Ciudad $ciudad, Cliente $cliente)
     {
         $cliente->delete();
-        return back()->with('success','Cliente eliminado');
+        return back()->with('success', 'Cliente eliminado');
     }
 }
