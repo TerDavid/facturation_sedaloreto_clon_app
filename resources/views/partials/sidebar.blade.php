@@ -38,6 +38,22 @@ $menu = [
         'route' => 'sede.index',
         'icon' => 'default',
     ],
+    [
+        'title' => 'Mantenimiento',
+        'icon' => 'default',
+        'children' => [
+            [
+                'title' => 'Sedes',
+                'route' => 'sede.index',
+                'icon' => 'default',
+            ],
+            [
+                'title' => 'Sectores',
+                'route' => 'dashboard',
+                'icon' => 'default',
+            ],
+        ],
+],
     // [
     //     'title' => 'Gestión de Sedes',
     //     'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="square-activity" class="lucide lucide-square-activity size-4 stroke-[1.5] [--color:currentColor] stroke-(--color) fill-(--color)/25 side-menu__link__icon">
@@ -63,13 +79,13 @@ $menu = [
         'children' => [
             [
                 'title' => 'Registrar nuevo medidor',
-                'url' => route('clientes.indexSelectCity'),
+                'url' => route('clientes.index'),
 
                 'icon' => 'default',
             ],
             [
                 'title' => 'Listado de medidores',
-                'url' => route('gestion_clientes2.index2'),
+                // 'url' => route('gestion_clientes2.index2'),
                 'icon' => 'default',
             ],
         ],
