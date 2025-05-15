@@ -280,7 +280,7 @@
     </div>
     @section('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
+            //document.addEventListener('DOMContentLoaded', () => {
                 document.addEventListener('alpine:init', () => {
                     Alpine.store('selects', {
                         paisSelected: '',
@@ -306,7 +306,7 @@
                     })
                 })
 
-            });
+            //});
         </script>
     @endsection
 </x-app-layout>
