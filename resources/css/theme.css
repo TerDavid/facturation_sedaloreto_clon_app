@@ -3,5 +3,16 @@
 @import './side-menu.css';
 @import './simplebar.css';
 
+@reference "./app.css";
 
 
+.cbox {
+    @apply relative cursor-pointer;
+    @apply before:absolute before:inset-0 before:mx-3 before:-mb-3 before:border before:rounded-xl;
+    @apply before:z-[-1] before:shadow-[0px_3px_5px_#0000000b];
+    @apply after:absolute after:inset-0 after:border after:rounded-xl after:z-[-1];
+    @apply after:shadow-[0px_3px_5px_#0000000b] after:backdrop-blur-md;
+    @apply [&.active]:text-[--color] [&.active]:before:bg-[--color]/5 [&.active]:before:border-[--color]/20;
+    @apply [&.active]:after:bg-[--color]/5 [&.active]:after:border-[--color]/20;
+    @apply [--color:var(--color-primary)];
+}

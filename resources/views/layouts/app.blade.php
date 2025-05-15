@@ -54,7 +54,6 @@
     </div>
     @vite(['resources/js/utils.js'])
     <script src="{{ asset('js/vendor/dom.js') }}"></script>
-    <script src="{{ asset('js/vendor/lucide.js') }}"></script>
     <script src="{{ asset('js/vendor/simplebar.js') }}"></script>
     <script src="{{ asset('js/vendor/enigma.js') }}"></script>
     @yield('scripts')

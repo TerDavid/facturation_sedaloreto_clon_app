@@ -29,16 +29,9 @@
                     class="side-menu__link {{ $isActiveGroup ? 'side-menu__link--active' : '' }}">
                     @if (isset($item['icon']))
                         @if ($item['icon'] === 'default')
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" data-lucide="circle-gauge"
-                                class="lucide lucide-circle-gauge size-4 stroke-[1.5] [--color:currentColor] stroke-(--color) fill-(--color)/25 side-menu__link__icon">
-                                <path d="M15.6 2.7a10 10 0 1 0 5.7 5.7"></path>
-                                <circle cx="12" cy="12" r="2"></circle>
-                                <path d="M13.4 10.6 19 5"></path>
-                            </svg>
+                            <i data-lucide="circle-gauge"></i>
                         @else
-                            {!! $item['icon'] !!}
+                            <i data-lucide="{{ $item['icon'] }}"></i>
                         @endif
                     @endif
                     <div class="side-menu__link__title">{{ $item['title'] }}</div>
@@ -66,18 +59,9 @@
                                     class="side-menu__link {{ (isset($child['route']) ? request()->routeIs($child['route']) : false) ? 'side-menu__link--active' : '' }}">
                                     @if (isset($child['icon']))
                                         @if ($child['icon'] === 'default')
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                data-lucide="circle-gauge"
-                                                class="lucide lucide-circle-gauge size-4 stroke-[1.5] [--color:currentColor] stroke-(--color) fill-(--color)/25 side-menu__link__icon">
-                                                <path d="M15.6 2.7a10 10 0 1 0 5.7 5.7">
-                                                </path>
-                                                <circle cx="12" cy="12" r="2"></circle>
-                                                <path d="M13.4 10.6 19 5"></path>
-                                            </svg>
+                                            <i data-lucide="circle-gauge"></i>
                                         @else
-                                            {!! $child['icon'] !!}
+                                            <i data-lucide="{{ $item['icon'] }}"></i>
                                         @endif
                                     @endif
                                     <div class="side-menu__link__title">

@@ -35,7 +35,6 @@
             </button>
         </form> --}}
 
-
         @if (true)
             {{-- 2) Formulario completo --}}
             <form method="POST" id="frm_filter" action="{{ route('gestion.clientes.store') }}">
@@ -44,8 +43,6 @@
                 {{-- ocultos básicos --}}
                 {{-- <input type="hidden" name="ciudad_id" value="{{ $ciudad->id }}"> --}}
                 {{-- <input type="hidden" name="sector_id" value="{{ request('sector_id') }}"> --}}
-
-
 
                 <div class="md:grid  md:grid-cols-2 flex flex-col  gap-2 md:gap-4">
                     {{-- Ciudad --}}
@@ -70,9 +67,7 @@
                         <x-form.label for="sector_id">
                             Seleccionar sector
                         </x-form.label>
-                        <x-form.select
-                            @change="$store.selects.cargarManzanas()"
-                            x-model="$store.selects.sectorSelected"
+                        <x-form.select @change="$store.selects.cargarManzanas()" x-model="$store.selects.sectorSelected"
                             x-bind:disabled="$store.selects.sectores.length === 0" id="sector_id" name="sector_id"
                             class="mt-1 block w-full rounded">
                             <option value="">-- selecciona sector --</option>
@@ -285,113 +280,32 @@
     </div>
     @section('scripts')
         <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.store('selects', {
-                    paisSelected: '',
-                    sectores: [],
-                    sectorSelected: '',
-                    manzanas: [],
-
-                    cargarSectores() {
-                        console.log(this.paisSelected);
-                        this.sectores = [];
-                        // this.sectorSelected = '';
-                        axios.get(`/api/ciudades/${this.paisSelected}/sectores`).then(response => {
-                            console.log(response.data);
-                            this.sectores = response.data;
-                            console.log(this.sectores)
-                            // this.sectorSelected = this.sectores[0].id;
-                        })
-
-                        // this.sectorSelected = this.sectores[0].id;
-                    },
-                    cargarManzanas() {
-                        this.manzanas = [];
-                        // this.manzanaSelected = '';
-                        axios.get(`/api/sector/${this.sectorSelected}/manzanas`).then(response => {
-                            console.log(response.data);
-                            this.manzanas = response.data;
-                            console.log(this.manzanas)
-                            // this.sectorSelected = this.sectores[0].id;
-                        })
-                    }
-                })
-            })
-        </script>
-        <script>
-            // const selectCiudades = () => ({
-            //     options: [],
-            //     selected: null,
-            //     init() {
-            //         this.$watch('selected', value => {
-            //             if (value) {
-            //                 axios.get(`/api/ciudades/${value}/sectores`)
-            //                     .then(response => {
-            //                         this.options = response.data;
-            //                     })
-            //                     .catch(error => {
-            //                         console.error(error);
-            //                     });
-            //             }
-            //         });
-            //     }
-            // })
             document.addEventListener('DOMContentLoaded', () => {
-                const sectorSelect = document.getElementById('sector_id');
-                const ciudadSelect = document.getElementById('ciudad_id');
-                const manzanaSelect = document.getElementById('manzana_id');
-                const frm = document.getElementById('frm_create');
-                const frm_filter = document.getElementById('frm_filter');
+                document.addEventListener('alpine:init', () => {
+                    Alpine.store('selects', {
+                        paisSelected: '',
+                        sectores: [],
+                        sectorSelected: '',
+                        manzanas: [],
 
-                // Cambiar el valor de ciudad_id al seleccionar un sector
-                // ciudadSelect.addEventListener('change', function() {
-                //     // location.href = `?sector_id=${sectorSelect.value}`;
-                //     // frm_filter.submit()
-                //     // location
-                //     const selectedCiudad = this.options[this.selectedIndex];
-                //     sectorSelect.disabled = true;
-                //     axios.get(`/api/ciudades/${selectedCiudad.value}/sectores`)
-                //         .then(response => {
-                //             console.log(response.data);
-                //             sectorSelect.innerHTML = '<option value="">-- selecciona sector --</option>';
-                //             response.data.forEach(sector => {
-                //                 const option = document.createElement('option');
-                //                 option.value = sector.id;
-                //                 option.textContent = sector.sector;
-                //                 sectorSelect.appendChild(option);
-                //             });
-                //             sectorSelect.disabled = false;
-                //         })
-                //         .catch(error => {
-                //             sectorSelect.disabled = false;
+                        cargarSectores() {
+                            this.sectores = [];
+                            axios.get(`/api/ciudades/${this.paisSelected}/sectores`).then(response => {
+                                console.log(response.data);
+                                this.sectores = response.data;
+                                console.log(this.sectores)
+                            })
 
-                //         });
-                // });
-                // sectorSelect.addEventListener('change', function() {
-                //     // location.href = `?sector_id=${sectorSelect.value}`;
-                //     // frm_filter.submit()
-                //     // location
-                //     const selectedSector = this.options[this.selectedIndex];
-                //     manzanaSelect.disabled = true;
-                //     axios.get(`/api/sector/${selectedSector.value}/manzanas`)
-                //         .then(response => {
-                //             populateSelect(manzanaSelect, response.data.map(item => {
-                //                 return {
-                //                     id: 'item.id',
-                //                     name: 'item.manzana'
-                //                 }
-                //             }).unshift({
-                //                 id: '',
-                //                 name: '-- Seleccionar manzana --'
-                //             }));
+                        },
+                        cargarManzanas() {
+                            this.manzanas = [];
+                            axios.get(`/api/sector/${this.sectorSelected}/manzanas`).then(response => {
+                                this.manzanas = response.data;
+                            })
+                        }
+                    })
+                })
 
-                //             manzanaSelect.disabled = false;
-                //         })
-                //         .catch(error => {
-                //             manzanaSelect.disabled = false;
-
-                //         });
-                // });
             });
         </script>
     @endsection

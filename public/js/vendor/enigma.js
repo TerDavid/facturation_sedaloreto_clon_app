@@ -1,6 +1,14 @@
 // const sizeSidebar = "-ml-[155px]";
-document.addEventListener('DOMContentLoaded', () => {
 
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons({
+        attrs: {
+            class: ['size-4 stroke-[1.5] [--color:currentColor] stroke-(--color) fill-(--color)/25'],
+            // 'stroke-width': 1,
+            stroke: 'currentColor'
+        },
+        icons: lucide.icons
+    })
     const sizeSidebar = "";
     (() => {
         var l = (e, r = 300, s = (o) => { }) => {
