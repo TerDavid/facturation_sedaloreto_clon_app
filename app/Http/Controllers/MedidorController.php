@@ -21,7 +21,12 @@ class MedidorController extends Controller
         return view('clientes.medidores.sectores', compact('ciudad','sectores'));
     }
 
-
+     public function indexSelectCity(Ciudad $ciudad, Sector $sector)
+    {
+       $ciudades = Ciudad::all();
+        $mode = 'sector';
+        return view('clientes.index', compact('ciudades', 'mode'));
+    }
 
     // 2) Listar medidores de un sector en esa ciudad
     public function index(Ciudad $ciudad, Sector $sector)

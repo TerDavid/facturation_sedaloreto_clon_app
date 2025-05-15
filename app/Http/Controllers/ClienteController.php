@@ -11,7 +11,14 @@ class ClienteController extends Controller
     public function index()
     {
         $ciudades = Ciudad::all();
-        return view('clientes.index', compact('ciudades'));
+        $mode = 'default';
+        return view('clientes.index', compact('ciudades', 'mode'));
+    }
+    public function indexSelectCity()
+    {
+        $ciudades = Ciudad::all();
+        $mode = 'direct';
+        return view('clientes.index', compact('ciudades', 'mode'));
     }
 
     // Dashboard de una ciudad

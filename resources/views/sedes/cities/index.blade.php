@@ -4,7 +4,9 @@
             {{ __('Seleccione ciudad') }}
         </h2>
     </x-slot>
-
+<div class="mt-8 flex items-center">
+        <h2 class="mr-auto text-lg font-medium">Sedes</h2>
+    </div>
     <div class="p-6 space-y-4">
          {{-- <a href="{{ route('sector.index') }}"
          class="inline-block px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded">
