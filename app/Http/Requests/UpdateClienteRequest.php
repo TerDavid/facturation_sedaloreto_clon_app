@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,29 +10,25 @@ class UpdateClienteRequest extends FormRequest
 
     public function rules()
     {
-        $clienteId = $this->route('cliente')->id;
+        $id = $this->route('cliente')->id;
 
         return [
-            'nombre'               => 'required|string|max:100',
-            'apellido'             => 'required|string|max:100',
-            'dni'                  => [
-                                        'required','string',
-                                        Rule::unique('clientes','dni')->ignore($clienteId)
-                                       ],
-            'celular'              => 'nullable|string|max:20',
-            'correo'               => 'nullable|email|max:150',
-            'direccion'            => 'nullable|string|max:255',
-            'estado'               => 'required|in:0,1,2,3',
-            'codigo_suministro'    => [
-                                        'nullable','string',
-                                        Rule::unique('clientes','codigo_suministro')->ignore($clienteId)
-                                       ],
-            'ciudad_id'            => 'required|exists:ciudades,id',
-            'medidor_id'           => 'nullable|exists:medidor,id',
-            'tarifa_id'            => 'nullable|exists:tarifas,id',
-            'consumo_sin_medidor_id'=> 'nullable|exists:consumos_sin_medidor,id',
-            'sector_id'             => 'nullable|exists:sector,id',      // ← añadido
-            'manzana_id'            => 'nullable|exists:manzana,id',    // ← añadido
+            'code_suministro'           => ['required','string',
+                                           Rule::unique('clientes','code_suministro')->ignore($id)],
+            'nombre'                    => 'required|string|max:100',
+            'direccion'                 => 'nullable|string|max:255',
+            'telefono'                  => 'nullable|string|max:20',
+            'email'                     => ['nullable','email','max:150',
+                                           Rule::unique('clientes','email')->ignore($id)],
+            'manzana_id'                => 'required|exists:manzana,id',
+            'crear_medidor'             => 'boolean',
+            'medidor_codigo'            => ['required_if:crear_medidor,true','string',
+                                           Rule::unique('medidores','codigo')
+                                                ->ignore($this->route('cliente')->medidor->id ?? 0)],
+            'medidor_fecha_instalacion' => 'nullable|date',
+            'ubicacion_detallada'       => 'nullable|string|max:255',
+            'tarifa_id'                 => 'required_if:crear_medidor,true|exists:tarifas,id',
+            'consumo_sin_medidor_id'    => 'required_if:crear_medidor,false|exists:consumos_sin_medidor,id',
         ];
     }
 }

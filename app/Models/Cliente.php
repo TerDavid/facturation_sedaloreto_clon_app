@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -12,41 +11,20 @@ class Cliente extends Model
     protected $table = 'clientes';
 
     protected $fillable = [
+        'code_suministro',
         'nombre',
-        'apellido',
-        'dni',
-        'celular',
-        'correo',
         'direccion',
-        'estado',
-        'codigo_suministro',
-        'ciudad_id',
-        'sector_id',           // ← lo agregamos
-        'manzana_id',          // ← y también
-        'medidor_id',
+        'telefono',
+        'email',
+        'id_manzana',
+        'categoria',
         'tarifa_id',
-        'consumo_sin_medidor_id',
+        'id_consumo_sin_medidor',
     ];
-
-    // Relaciones
-    public function ciudad()
-    {
-        return $this->belongsTo(Ciudad::class);
-    }
-
-    public function medidor()
-    {
-        return $this->belongsTo(Medidor::class);
-    }
-
-    public function sector()
-    {
-        return $this->belongsTo(Sector::class, 'sector_id');
-    }
 
     public function manzana()
     {
-        return $this->belongsTo(Manzana::class, 'manzana_id');
+        return $this->belongsTo(Manzana::class, 'id_manzana');
     }
 
     public function tarifa()
@@ -56,6 +34,18 @@ class Cliente extends Model
 
     public function consumoSinMedidor()
     {
-        return $this->belongsTo(ConsumoSinMedidor::class, 'consumo_sin_medidor_id');
+        return $this->belongsTo(ConsumoSinMedidor::class, 'id_consumo_sin_medidor');
+    }
+    public function sector()
+    {
+        return $this->belongsTo(Sector::class, 'sector_id');
+    }
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
+    }
+    public function medidor()
+    {
+        return $this->hasOne(Medidor::class, 'cliente_id');
     }
 }
