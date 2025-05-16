@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
         ->name('gestion_clientes2.')
         ->controller(GestionClienteController::class)
         ->group(function () {
-            Route::get('/',              'index2')->name('index2');
+            Route::get('/',              'index')->name('index');
         });
 
     Route::prefix('medidores/gestion')
@@ -94,13 +94,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/',              'indexSelectCity')->name('index');
         });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Clientes y Medidores
-    |--------------------------------------------------------------------------
-    */
-    // Route::get('clientes', [ClienteController::class,'index'])
-    //      ->name('clientes.index');
+
 
     // — Gestión de Clientes SIN {ciudad} en la URI
     Route::prefix('clientes/gestion')
@@ -249,7 +243,7 @@ Route::middleware('auth')->group(function () {
                 ->name('clientes.')
                 ->controller(GestionClienteController::class)
                 ->group(function () {
-                    Route::get('/', 'index2')->name('index');
+                    Route::get('/', 'index')->name('index');
                     Route::get('create', 'create')->name('create');
                     Route::post('store', 'store')->name('store');
                 });
