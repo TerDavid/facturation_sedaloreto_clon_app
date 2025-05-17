@@ -191,7 +191,7 @@
                         <th class="px-4 py-2">Ciudad</th>
                         <th class="px-4 py-2">Sector</th>
                         <th class="px-4 py-2">Manzana</th>
-                        <th class="px-4 py-2">Código</th>
+                        <th class="px-4 py-2">Código suministro</th>
                         <th class="px-4 py-2">Nombre</th>
                         <th class="px-4 py-2">Apellido</th>
                         <th class="px-4 py-2">DNI</th>
