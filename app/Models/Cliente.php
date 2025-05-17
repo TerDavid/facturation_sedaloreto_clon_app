@@ -50,4 +50,9 @@ class Cliente extends Model
     {
         return $this->hasOne(Medidor::class, 'cliente_id');
     }
+
+    public function consumos()
+    {
+        return $this->hasMany(\App\Models\Consumo::class, 'cliente_id');
+    }
 }

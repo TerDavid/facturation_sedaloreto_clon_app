@@ -16,6 +16,7 @@ use App\Http\Controllers\GestionController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\SectorRelationController;
 use App\Http\Controllers\TecnicoController;
+use App\Http\Controllers\ConsumoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -240,6 +241,17 @@ Route::middleware('auth')->group(function () {
         GestionClienteController::class,
         ['as' => 'gestion']    // prefijo para los names
     );
+
+
+
+    Route::post('facturation/consumo/emitir', [ConsumoController::class, 'emitir'])
+     ->name('facturation.consumo.emitir');
+
+    Route::resource('facturation/consumo', ConsumoController::class, [
+        'as' => 'facturation'
+    ])->except(['show']);
+
+
 });
 
 require __DIR__ . '/auth.php';

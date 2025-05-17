@@ -14,7 +14,7 @@ $menu = [
                 'route' => 'gestion.clientes.index',
                 'icon' => 'default',
             ],
-           
+
 
         ],
     ],
@@ -25,7 +25,7 @@ $menu = [
         'children' => [
             [
                 'title' => 'Eminisión de facturas',
-
+                'route' => 'facturation.consumo.index',
                 'icon' => 'default',
             ],
             [
