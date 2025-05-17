@@ -52,9 +52,11 @@ class GestionClienteController extends Controller
         $cliente = Cliente::create([
             'code_suministro'        => $v['code_suministro'],
             'nombre'                 => $v['nombre'],
+            'apellido'               => $v['apellido'],
+            'dni'                    => $v['dni'],
             'direccion'              => $v['direccion'] ?? null,
-            'telefono'               => $v['telefono'] ?? null,
-            'email'                  => $v['email'] ?? null,
+            'telefono'               => $v['telefono']  ?? null,
+            'email'                  => $v['email']     ?? null,
             'id_manzana'             => $v['manzana_id'],
             'categoria'              => $categoria,
             'tarifa_id'              => $req->boolean('crear_medidor') ? $v['tarifa_id'] : null,
@@ -70,8 +72,8 @@ class GestionClienteController extends Controller
         }
 
         return redirect()
-            ->route('gestion_clientes.index')
-            ->with('success', 'Cliente registrado correctamente.');
+    ->route('gestion.clientes.index')
+    ->with('success','Cliente registrado correctamente.');
     }
 
     /**
@@ -88,9 +90,11 @@ class GestionClienteController extends Controller
         $cliente->update([
             'code_suministro'        => $v['code_suministro'],
             'nombre'                 => $v['nombre'],
+            'apellido'               => $v['apellido'],
+            'dni'                    => $v['dni'],
             'direccion'              => $v['direccion'] ?? null,
-            'telefono'               => $v['telefono'] ?? null,
-            'email'                  => $v['email'] ?? null,
+            'telefono'               => $v['telefono']  ?? null,
+            'email'                  => $v['email']     ?? null,
             'id_manzana'             => $v['manzana_id'],
             'categoria'              => $categoria,
             'tarifa_id'              => $req->boolean('crear_medidor') ? $v['tarifa_id'] : null,
@@ -103,18 +107,16 @@ class GestionClienteController extends Controller
                 'fecha_instalacion'   => $v['medidor_fecha_instalacion'] ?? null,
                 'ubicacion_detallada' => $v['ubicacion_detallada'] ?? null,
             ];
-            if ($cliente->medidor) {
-                $cliente->medidor->update($attrs);
-            } else {
-                $cliente->medidor()->create($attrs);
-            }
+            $cliente->medidor
+                ? $cliente->medidor->update($attrs)
+                : $cliente->medidor()->create($attrs);
         } else {
             $cliente->medidor?->delete();
         }
 
         return redirect()
-            ->route('gestion_clientes.index')
-            ->with('success', 'Cliente actualizado correctamente.');
+        ->route('gestion.clientes.index')
+        ->with('success','Cliente actualizado correctamente.');
     }
 
     /**

@@ -235,21 +235,11 @@ Route::middleware('auth')->group(function () {
 
     // Route::resource('tecnico', TecnicoController::class);
 
-    Route::prefix('gestion')
-        ->name('gestion.')
-        // ->controller(GestionController::class)
-        ->group(function () {
-            Route::prefix('clientes')
-                ->name('clientes.')
-                ->controller(GestionClienteController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('create', 'create')->name('create');
-                    Route::post('store', 'store')->name('store');
-                });
-            // Route::get('clientes/create', 'clientes')->name('clientes');
-            // Route::get('clientes', 'clientes_create')->name('clientes.create');
-        });
+    Route::resource(
+        'gestion/clientes',
+        GestionClienteController::class,
+        ['as' => 'gestion']    // prefijo para los names
+    );
 });
 
 require __DIR__ . '/auth.php';
