@@ -8,12 +8,12 @@ $menu = [
 
     [
         'title' => 'Dashboard',
-        'icon' => 'default',
+        'icon' => 'home',
         'children' => [
             [
                 'title' => 'ver Graficos',
                 'route' => 'dashboard',
-                'icon' => 'default',
+                'icon' => 'bar-chart-2',
             ],
 
 
@@ -22,12 +22,12 @@ $menu = [
 
     [
         'title' => 'Gestión de Clientes',
-        'icon' => 'default',
+        'icon' => 'users',
         'children' => [
             [
                 'title' => 'Listado de clientes',
                 'route' => 'gestion.clientes.index',
-                'icon' => 'default',
+                'icon' => 'users',
             ],
 
 
@@ -36,29 +36,29 @@ $menu = [
 
       [
         'title' => 'Facturación',
-        'icon' => 'default',
+        'icon' => 'file-text',
         'children' => [
             [
                 'title' => 'Eminisión de facturas',
                 'route' => 'facturation.consumo.index',
-                'icon' => 'default',
+                'icon' => 'file-text',
             ],
             [
                 'title' => 'Editar valores de facturación',
                 'route' => 'valores.editAll',
-                'icon' => 'default',
+                'icon' => 'file-text',
             ],
         ],
     ],
 
     [
         'title' => 'Gestión de Sedes',
-        'icon' => 'default',
+        'icon' => 'map-pin',
         'children' => [
             [
                 'title' => 'Sedes',
                 'route' => 'sede.index',
-                'icon' => 'default',
+                'icon' => 'building',
             ],
         ],
 ],
