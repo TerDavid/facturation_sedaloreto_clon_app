@@ -10,6 +10,8 @@ use App\Models\Manzana;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreConsumoRequest;
 use App\Http\Requests\UpdateConsumoRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ConsumosExport;
 
 class ConsumoController extends Controller
 {
@@ -115,6 +117,23 @@ class ConsumoController extends Controller
         return response()->json([
             'message' => "Se emitieron facturas para {$clientes->count()} clientes este mes."
         ]);
+    }
+
+    public function exportar(Request $request)
+    {
+        $data = $request->validate([
+            'ciudad_id'  => 'nullable|exists:ciudades,id',
+            'sector_id'  => 'nullable|exists:sector,id',
+            'manzana_id' => 'nullable|exists:manzana,id',
+            'month'      => 'nullable|date_format:Y-m',
+        ]);
+
+        // por defecto mes actual si no enviaron
+        $data['month'] = $data['month'] ?? now()->format('Y-m');
+
+        $filename = "consumos_{$data['month']}.xlsx";
+
+        return Excel::download(new ConsumosExport($data), $filename);
     }
 
 }

@@ -28,7 +28,7 @@
       </div>
     @endif
 
-    <div x-data="facturaManager()" class="py-6">
+    <div x-data="facturaManager()" class="py-6 space-y-6">
         {{-- Botones --}}
         <div class="flex space-x-2">
             <a href="{{ route('facturation.consumo.create') }}"
@@ -39,9 +39,13 @@
                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
               Emitir Facturas
             </button>
+            <button @click="openExportPopup()"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+              Exportar Listas
+            </button>
         </div>
 
-        {{-- Pop-up de filtros --}}
+        {{-- Pop-up: Emitir Facturas --}}
         <div x-show="isPopupOpen" x-cloak
              class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
@@ -75,7 +79,8 @@
               {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
-                <select x-model="form.manzana_id" class="w-full p-2 border rounded">
+                <select x-model="form.manzana_id"
+                        class="w-full p-2 border rounded">
                   <option value="">→ Todas</option>
                   <template x-for="m in manzanas" :key="m.id">
                     <option :value="m.id" x-text="m.manzana"></option>
@@ -83,12 +88,73 @@
                 </select>
               </div>
               {{-- Acciones --}}
-              <div class="flex justify-end space-x-2">
+              <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closePopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
                 <button @click="submitEmit()"
                         class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
                   Emitir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{-- Pop-up: Exportar Listas --}}
+        <div x-show="isExportPopupOpen" x-cloak
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+            <button @click="closeExportPopup()"
+                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
+            <h3 class="text-xl font-bold mb-4">Filtrar para exportar</h3>
+
+            <div class="space-y-4">
+              {{-- Ciudad --}}
+              <div>
+                <label class="block mb-1">Ciudad</label>
+                <select x-model="exportForm.ciudad_id" @change="filterSectoresExport()"
+                        class="w-full p-2 border rounded">
+                  <option value="">→ Todas</option>
+                  <template x-for="c in ciudades" :key="c.id">
+                    <option :value="c.id" x-text="c.nombre"></option>
+                  </template>
+                </select>
+              </div>
+              {{-- Sector --}}
+              <div>
+                <label class="block mb-1">Sector</label>
+                <select x-model="exportForm.sector_id" @change="filterManzanasExport()"
+                        class="w-full p-2 border rounded">
+                  <option value="">→ Todos</option>
+                  <template x-for="s in sectores" :key="s.id">
+                    <option :value="s.id" x-text="s.sector"></option>
+                  </template>
+                </select>
+              </div>
+              {{-- Manzana --}}
+              <div>
+                <label class="block mb-1">Manzana</label>
+                <select x-model="exportForm.manzana_id"
+                        class="w-full p-2 border rounded">
+                  <option value="">→ Todas</option>
+                  <template x-for="m in manzanas" :key="m.id">
+                    <option :value="m.id" x-text="m.manzana"></option>
+                  </template>
+                </select>
+              </div>
+              {{-- Mes --}}
+              <div>
+                <label class="block mb-1">Mes</label>
+                <input type="month" x-model="exportForm.month"
+                       class="w-full p-2 border rounded"/>
+              </div>
+              {{-- Acciones --}}
+              <div class="flex justify-end space-x-2 mt-4">
+                <button @click="closeExportPopup()"
+                        class="px-4 py-2 border rounded">Cancelar</button>
+                <button @click="submitExport()"
+                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded">
+                  Exportar
                 </button>
               </div>
             </div>
@@ -118,21 +184,11 @@
                   <tr class="border-t border-gray-200">
                     <td class="px-4 py-2">{{ $c->id }}</td>
                     <td class="px-4 py-2">{{ $c->cliente->code_suministro }}</td>
-                    <td class="px-4 py-2">
-                      {{ $c->cliente->manzana->ciudad->nombre }}
-                    </td>
-                    <td class="px-4 py-2">
-                      {{ $c->cliente->manzana->sector->sector }}
-                    </td>
-                    <td class="px-4 py-2">
-                      {{ $c->cliente->manzana->manzana }}
-                    </td>
-                    <td class="px-4 py-2">
-                      {{ $c->cliente->nombre }} {{ $c->cliente->apellido }}
-                    </td>
-                    <td class="px-4 py-2">                             {{-- Mostramos dirección --}}
-                        {{ $c->cliente->direccion ?? '-' }}
-                      </td>
+                    <td class="px-4 py-2">{{ $c->cliente->manzana->ciudad->nombre }}</td>
+                    <td class="px-4 py-2">{{ $c->cliente->manzana->sector->sector }}</td>
+                    <td class="px-4 py-2">{{ $c->cliente->manzana->manzana }}</td>
+                    <td class="px-4 py-2">{{ $c->cliente->nombre }} {{ $c->cliente->apellido }}</td>
+                    <td class="px-4 py-2">{{ $c->cliente->direccion ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $c->m3_consumidos ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $c->hora_registro_consumo ?? '-' }}</td>
                     <td class="px-4 py-2 space-x-2">
@@ -161,6 +217,8 @@
         allManzanas: @json($allManzanas),
         sectores:    [],
         manzanas:    [],
+
+        // Pops Emitir
         isPopupOpen: false,
         form: { ciudad_id: '', sector_id: '', manzana_id: '' },
 
@@ -191,7 +249,38 @@
                  window.location.reload();
                })
                .catch(console.error);
-        }
+        },
+
+        // Pops Exportar
+        isExportPopupOpen: false,
+        exportForm: { ciudad_id: '', sector_id: '', manzana_id: '', month: '' },
+
+        openExportPopup()  { this.isExportPopupOpen = true; },
+        closeExportPopup() { this.isExportPopupOpen = false; },
+
+        filterSectoresExport() {
+          this.sectores = this.allSectores.filter(s =>
+            s.id_ciudad == this.exportForm.ciudad_id
+          );
+          this.exportForm.sector_id  = '';
+          this.manzanas              = [];
+          this.exportForm.manzana_id = '';
+        },
+
+        filterManzanasExport() {
+          this.manzanas = this.allManzanas.filter(m =>
+            m.id_sector == this.exportForm.sector_id
+          );
+          this.exportForm.manzana_id = '';
+        },
+
+        submitExport() {
+          if (!this.exportForm.month) {
+            this.exportForm.month = new Date().toISOString().slice(0,7);
+          }
+          const qs = new URLSearchParams(this.exportForm).toString();
+          window.location = '{{ route("facturation.consumo.exportar") }}?' + qs;
+        },
       }
     }
     </script>

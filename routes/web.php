@@ -247,6 +247,10 @@ Route::middleware('auth')->group(function () {
     Route::post('facturation/consumo/emitir', [ConsumoController::class, 'emitir'])
      ->name('facturation.consumo.emitir');
 
+     Route::get('facturation/consumo/exportar',
+     [ConsumoController::class, 'exportar'])
+   ->name('facturation.consumo.exportar');
+
     Route::resource('facturation/consumo', ConsumoController::class, [
         'as' => 'facturation'
     ])->except(['show']);
