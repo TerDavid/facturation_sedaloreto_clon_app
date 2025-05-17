@@ -13,6 +13,8 @@ class Cliente extends Model
     protected $fillable = [
         'code_suministro',
         'nombre',
+        'apellido',        // ← agregado
+        'dni',             // ← agregado
         'direccion',
         'telefono',
         'email',

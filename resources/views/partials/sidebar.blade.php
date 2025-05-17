@@ -10,15 +10,16 @@ $menu = [
         'icon' => 'default',
         'children' => [
             [
-                'title' => 'Registrar nuevo cliente',
-                'route' => 'gestion.clientes.create',
-                'icon' => 'default',
-            ],
-            [
                 'title' => 'Listado de clientes',
                 'route' => 'gestion.clientes.index',
                 'icon' => 'default',
             ],
+            [
+                'title' => 'Registrar nuevo cliente',
+                'route' => 'gestion.clientes.create',
+                'icon' => 'default',
+            ],
+
         ],
     ],
 
@@ -28,19 +29,19 @@ $menu = [
         'children' => [
             [
                 'title' => 'Eminisión de facturas',
-                'route' => 'gestion.clientes.create',
+           
                 'icon' => 'default',
             ],
             [
                 'title' => 'Editar valores de facturación',
-                'route' => 'gestion.clientes.index',
+
                 'icon' => 'default',
             ],
         ],
     ],
 
     [
-        'title' => 'Mantenimiento',
+        'title' => 'Gestión de Sedes',
         'icon' => 'default',
         'children' => [
             [
