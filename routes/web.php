@@ -259,6 +259,10 @@ Route::middleware('auth')->group(function () {
     ])->except(['show']);
 
 
+    Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])
+     ->name('consulta-factura.descargar');
+
+
 });
 
 require __DIR__ . '/auth.php';

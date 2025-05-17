@@ -25,6 +25,19 @@ return new class extends Migration
             $table->timestamp('hora_registro_consumo')
                   ->nullable();
 
+            // Fecha de emisión de la factura
+            $table->date('fecha_emision')
+                  ->nullable();
+
+            // Fecha de vencimiento de la factura
+            $table->date('fecha_vencimiento')
+                  ->nullable();
+
+            // Valor total a pagar (puede ser null)
+            $table->decimal('valor', 10, 2)
+                  ->nullable()
+                  ->comment('Valor total de la factura');
+
             $table->timestamps();
         });
     }

@@ -58,6 +58,7 @@
             <h3 class="text-xl font-bold mb-4">Filtrar para emitir</h3>
 
             <div class="space-y-4">
+              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="form.ciudad_id" @change="filterSectores()"
@@ -68,6 +69,7 @@
                   </template>
                 </select>
               </div>
+              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="form.sector_id" @change="filterManzanas()"
@@ -78,6 +80,7 @@
                   </template>
                 </select>
               </div>
+              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
                 <select x-model="form.manzana_id"
@@ -88,6 +91,19 @@
                   </template>
                 </select>
               </div>
+              {{-- Fecha de Emisión --}}
+              <div>
+                <label class="block mb-1">Fecha de Emisión</label>
+                <input type="date" x-model="form.fecha_emision"
+                       class="w-full p-2 border rounded"/>
+              </div>
+              {{-- Fecha de Vencimiento --}}
+              <div>
+                <label class="block mb-1">Fecha de Vencimiento</label>
+                <input type="date" x-model="form.fecha_vencimiento"
+                       class="w-full p-2 border rounded"/>
+              </div>
+              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closePopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -109,6 +125,7 @@
             <h3 class="text-xl font-bold mb-4">Filtrar para exportar</h3>
 
             <div class="space-y-4">
+              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="exportForm.ciudad_id" @change="filterSectoresExport()"
@@ -119,6 +136,7 @@
                   </template>
                 </select>
               </div>
+              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="exportForm.sector_id" @change="filterManzanasExport()"
@@ -129,6 +147,7 @@
                   </template>
                 </select>
               </div>
+              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
                 <select x-model="exportForm.manzana_id"
@@ -139,11 +158,13 @@
                   </template>
                 </select>
               </div>
+              {{-- Mes --}}
               <div>
                 <label class="block mb-1">Mes</label>
                 <input type="month" x-model="exportForm.month"
                        class="w-full p-2 border rounded"/>
               </div>
+              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closeExportPopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -200,6 +221,9 @@
                   <th class="px-4 py-2">Dirección</th>
                   <th class="px-4 py-2">m³ Consumidos</th>
                   <th class="px-4 py-2">Fecha / Hora</th>
+                  <th class="px-4 py-2">Fecha Emisión</th>
+                  <th class="px-4 py-2">Fecha Vencimiento</th>
+                  <th class="px-4 py-2">Valor</th>
                   <th class="px-4 py-2">Acciones</th>
                 </tr>
               </thead>
@@ -215,6 +239,9 @@
                     <td class="px-4 py-2">{{ $c->cliente->direccion ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $c->m3_consumidos ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $c->hora_registro_consumo ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $c->fecha_emision ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $c->fecha_vencimiento ?? '-' }}</td>
+                    <td class="px-4 py-2">S/ {{ number_format($c->valor ?? 0, 2) }}</td>
                     <td class="px-4 py-2 space-x-2">
                       <a href="{{ route('facturation.consumo.edit', $c) }}"
                          class="text-blue-600 hover:underline">Editar</a>
@@ -236,7 +263,6 @@
     <script>
     function facturaManager() {
       return {
-        // datos para filtros
         ciudades:    @json($ciudades),
         allSectores: @json($allSectores),
         allManzanas: @json($allManzanas),
@@ -245,7 +271,13 @@
 
         // Emitir
         isPopupOpen: false,
-        form: { ciudad_id: '', sector_id: '', manzana_id: '' },
+        form: {
+          ciudad_id: '',
+          sector_id: '',
+          manzana_id: '',
+          fecha_emision: '',
+          fecha_vencimiento: ''
+        },
         openPopup()  { this.isPopupOpen = true;  },
         closePopup() { this.isPopupOpen = false; },
         filterSectores() {
@@ -274,8 +306,8 @@
 
         // Exportar
         isExportPopupOpen: false,
-        exportForm: { ciudad_id: '', sector_id: '', manzana_id: '', month: '' },
-        openExportPopup()  { this.isExportPopupOpen = true;  },
+        exportForm: { ciudad_id:'',sector_id:'',manzana_id:'',month:''},
+        openExportPopup()  { this.isExportPopupOpen = true; },
         closeExportPopup() { this.isExportPopupOpen = false; },
         filterSectoresExport() {
           this.sectores = this.allSectores.filter(s =>

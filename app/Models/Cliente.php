@@ -13,8 +13,8 @@ class Cliente extends Model
     protected $fillable = [
         'code_suministro',
         'nombre',
-        'apellido',        // ← agregado
-        'dni',             // ← agregado
+        'apellido',
+        'dni',
         'direccion',
         'telefono',
         'email',
@@ -38,14 +38,7 @@ class Cliente extends Model
     {
         return $this->belongsTo(ConsumoSinMedidor::class, 'id_consumo_sin_medidor');
     }
-    public function sector()
-    {
-        return $this->belongsTo(Sector::class, 'sector_id');
-    }
-    public function ciudad()
-    {
-        return $this->belongsTo(Ciudad::class, 'ciudad_id');
-    }
+
     public function medidor()
     {
         return $this->hasOne(Medidor::class, 'cliente_id');
@@ -53,6 +46,6 @@ class Cliente extends Model
 
     public function consumos()
     {
-        return $this->hasMany(\App\Models\Consumo::class, 'cliente_id');
+        return $this->hasMany(Consumo::class, 'cliente_id');
     }
 }

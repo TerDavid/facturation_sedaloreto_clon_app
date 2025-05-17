@@ -3,50 +3,68 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Factura;
+use App\Models\Consumo;
 use App\Models\Ciudad;
 use Carbon\Carbon;
+// Importa la fachada de DOMPDF directamente
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class ConsultaFacturaController extends Controller
 {
-    /**
-     * Mostrar welcome.blade.php con la lista de ciudades.
-     */
     public function index()
     {
         $ciudades = Ciudad::orderBy('nombre')->get();
         return view('welcome', compact('ciudades'));
     }
 
-    /**
-     * Procesar el POST desde welcome.blade.php.
-     */
     public function consultar(Request $request)
     {
         $data = $request->validate([
-            'codigo' => ['required','string','exists:clientes,codigo_suministro'],
+            'codigo' => ['required','string','exists:clientes,code_suministro'],
             'ciudad' => ['required','integer','exists:ciudades,id'],
         ]);
 
-        $factura = Factura::with('cliente.ciudad')
+        $now = Carbon::now();
+
+        $consumo = Consumo::with('cliente.manzana.ciudad')
+            ->whereNotNull('fecha_emision')
+            ->whereYear('fecha_emision', $now->year)
+            ->whereMonth('fecha_emision', $now->month)
             ->whereHas('cliente', function($q) use($data) {
-                $q->where('codigo_suministro', $data['codigo'])
-                  ->where('ciudad_id', $data['ciudad']);
+                $q->where('code_suministro', $data['codigo'])
+                  ->whereHas('manzana', fn($q2) =>
+                      $q2->where('id_ciudad', $data['ciudad'])
+                  );
             })
-            ->whereMonth('fecha_emision', Carbon::now()->month)
-            ->whereYear('fecha_emision',  Carbon::now()->year)
             ->first();
 
-        // Siempre recargamos la lista de ciudades para la vista
         $ciudades = Ciudad::orderBy('nombre')->get();
 
-        if (! $factura) {
+        if (! $consumo) {
             return back()
                 ->withInput()
-                ->with('error', 'No se encontró factura emitida para el mes actual.')
+                ->with('error','No se encontró ningún recibo emitido para el mes actual.')
                 ->with(compact('ciudades'));
         }
 
-        return view('welcome', compact('factura','ciudades'));
+        return view('welcome', compact('consumo','ciudades'));
+    }
+
+    public function descargar(string $codigo)
+    {
+        $now = Carbon::now();
+
+        $consumo = Consumo::with('cliente.manzana.ciudad')
+            ->whereNotNull('fecha_emision')
+            ->whereYear('fecha_emision', $now->year)
+            ->whereMonth('fecha_emision', $now->month)
+            ->whereHas('cliente', fn($q) =>
+                $q->where('code_suministro', $codigo)
+            )
+            ->firstOrFail();
+
+        $pdf = PDF::loadView('pdf.recibo', compact('consumo'));
+
+        return $pdf->download("recibo_{$codigo}.pdf");
     }
 }

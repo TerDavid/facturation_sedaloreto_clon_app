@@ -15,6 +15,9 @@ class Consumo extends Model
         'cliente_id',
         'm3_consumidos',
         'hora_registro_consumo',
+        'fecha_emision',        // ← añade esto
+        'fecha_vencimiento',    // ← y esto
+        'valor',
     ];
 
     public function cliente()
