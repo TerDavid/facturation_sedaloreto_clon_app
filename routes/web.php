@@ -43,7 +43,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-    
+
 
 Route::middleware('auth')->group(function () {
     // Perfil
@@ -263,8 +263,7 @@ Route::middleware('auth')->group(function () {
     ])->except(['show']);
 
 
-    Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])
-     ->name('consulta-factura.descargar');
+
 
 
 
@@ -286,6 +285,9 @@ Route::put('facturation/valores', [ValorGeneralController::class,'updateAll'])
 
 
 });
+
+Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])
+->name('consulta-factura.descargar');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/api.php';
