@@ -37,9 +37,9 @@ class CreateTarifasTable extends Migration
                 'categoria'             => 'DOMESTICO',
                 'rango_min'             => 0,
                 'rango_max'             => 8,
-                'tarifa_agua'           => 2.336,
-                'tarifa_alcantarillado' => 0.700,
-                'cargo_fijo'            => 2.39,
+                'tarifa_agua'           => 1.820,
+                'tarifa_alcantarillado' => 0.546,
+                'cargo_fijo'            => 2.51,
             ],
             [
                 'categoria'             => 'DOMESTICO',

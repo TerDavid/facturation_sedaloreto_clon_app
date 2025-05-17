@@ -5,45 +5,60 @@ $menu = [
         'label' => 'GESTIONAR',
         'type' => 'label',
     ],
+
+    [
+        'title' => 'Dashboard',
+        'icon' => 'home',
+        'children' => [
+            [
+                'title' => 'ver Graficos',
+                'route' => 'dashboard',
+                'icon' => 'bar-chart-2',
+            ],
+
+
+        ],
+    ],
+
     [
         'title' => 'Gestión de Clientes',
-        'icon' => 'default',
+        'icon' => 'users',
         'children' => [
             [
                 'title' => 'Listado de clientes',
                 'route' => 'gestion.clientes.index',
-                'icon' => 'default',
+                'icon' => 'users',
             ],
-           
+
 
         ],
     ],
 
       [
         'title' => 'Facturación',
-        'icon' => 'default',
+        'icon' => 'file-text',
         'children' => [
             [
                 'title' => 'Eminisión de facturas',
-
-                'icon' => 'default',
+                'route' => 'facturation.consumo.index',
+                'icon' => 'file-text',
             ],
             [
                 'title' => 'Editar valores de facturación',
-
-                'icon' => 'default',
+                'route' => 'valores.editAll',
+                'icon' => 'file-text',
             ],
         ],
     ],
 
     [
         'title' => 'Gestión de Sedes',
-        'icon' => 'default',
+        'icon' => 'map-pin',
         'children' => [
             [
                 'title' => 'Sedes',
                 'route' => 'sede.index',
-                'icon' => 'default',
+                'icon' => 'building',
             ],
         ],
 ],
