@@ -5,6 +5,21 @@ $menu = [
         'label' => 'GESTIONAR',
         'type' => 'label',
     ],
+
+    [
+        'title' => 'Dashboard',
+        'icon' => 'default',
+        'children' => [
+            [
+                'title' => 'ver Graficos',
+                'route' => 'dashboard',
+                'icon' => 'default',
+            ],
+
+
+        ],
+    ],
+
     [
         'title' => 'Gestión de Clientes',
         'icon' => 'default',
@@ -30,7 +45,7 @@ $menu = [
             ],
             [
                 'title' => 'Editar valores de facturación',
-
+                'route' => 'valores.editAll',
                 'icon' => 'default',
             ],
         ],

@@ -17,6 +17,8 @@ use App\Http\Controllers\RelationController;
 use App\Http\Controllers\SectorRelationController;
 use App\Http\Controllers\TecnicoController;
 use App\Http\Controllers\ConsumoController;
+use App\Http\Controllers\ValorGeneralController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +39,11 @@ Route::post('/', [ConsultaFacturaController::class, 'consultar'])
 | Dashboard y perfil
 |--------------------------------------------------------------------------
 */
-Route::get('/dashboard', fn() => view('dashboard'))
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+    
 
 Route::middleware('auth')->group(function () {
     // Perfil
@@ -264,8 +268,21 @@ Route::middleware('auth')->group(function () {
 
 
 
+      // Mostrar formulario único de edición
+    Route::get('facturation/valores', [ValorGeneralController::class,'editAll'])
+    ->name('valores.editAll');
 
-     
+// Procesar la actualización en bloque
+Route::put('facturation/valores', [ValorGeneralController::class,'updateAll'])
+    ->name('valores.updateAll');
+
+
+
+
+
+
+
+
 
 
 });
