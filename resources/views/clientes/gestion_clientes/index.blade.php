@@ -198,6 +198,7 @@
                         <th class="px-4 py-2">Teléfono</th>
                         <th class="px-4 py-2">Correo</th>
                         <th class="px-4 py-2">Categoría</th>
+                        <th class="px-4 py-2">Medidor</th>
                         <th class="px-4 py-2">Acciones</th>
                     </tr>
                     </thead>
@@ -214,6 +215,9 @@
                             <td class="px-4 py-2">{{ $c->telefono }}</td>
                             <td class="px-4 py-2">{{ $c->email }}</td>
                             <td class="px-4 py-2">{{ $c->categoria }}</td>
+                            <td class="px-4 py-2">
+                                {{ $c->tarifa_id ? 'Con medidor' : 'Sin medidor' }}
+                              </td>
                             <td class="px-4 py-2 space-x-2">
                                 <button
                                     @click="openForm('edit', {
