@@ -12,6 +12,7 @@ use App\Http\Requests\StoreConsumoRequest;
 use App\Http\Requests\UpdateConsumoRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ConsumosExport;
+use App\Imports\ConsumosImport;
 
 class ConsumoController extends Controller
 {
@@ -135,5 +136,19 @@ class ConsumoController extends Controller
 
         return Excel::download(new ConsumosExport($data), $filename);
     }
+
+    public function importar(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new ConsumosImport, $request->file('file'));
+
+        return redirect()
+            ->route('facturation.consumo.index')
+            ->with('success', 'Consumos importados correctamente.');
+    }
+
 
 }

@@ -29,7 +29,7 @@
     @endif
 
     <div x-data="facturaManager()" class="py-6 space-y-6">
-        {{-- Botones --}}
+        {{-- Botones principales --}}
         <div class="flex space-x-2">
             <a href="{{ route('facturation.consumo.create') }}"
                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
@@ -43,6 +43,10 @@
                     class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
               Exportar Listas
             </button>
+            <button @click="openImportPopup()"
+                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">
+              Importar Consumos
+            </button>
         </div>
 
         {{-- Pop-up: Emitir Facturas --}}
@@ -54,7 +58,6 @@
             <h3 class="text-xl font-bold mb-4">Filtrar para emitir</h3>
 
             <div class="space-y-4">
-              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="form.ciudad_id" @change="filterSectores()"
@@ -65,7 +68,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="form.sector_id" @change="filterManzanas()"
@@ -76,7 +78,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
                 <select x-model="form.manzana_id"
@@ -87,7 +88,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closePopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -109,7 +109,6 @@
             <h3 class="text-xl font-bold mb-4">Filtrar para exportar</h3>
 
             <div class="space-y-4">
-              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="exportForm.ciudad_id" @change="filterSectoresExport()"
@@ -120,7 +119,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="exportForm.sector_id" @change="filterManzanasExport()"
@@ -131,7 +129,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
                 <select x-model="exportForm.manzana_id"
@@ -142,13 +139,11 @@
                   </template>
                 </select>
               </div>
-              {{-- Mes --}}
               <div>
                 <label class="block mb-1">Mes</label>
                 <input type="month" x-model="exportForm.month"
                        class="w-full p-2 border rounded"/>
               </div>
-              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closeExportPopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -158,6 +153,35 @@
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {{-- Pop-up: Importar Consumos --}}
+        <div x-show="isImportPopupOpen" x-cloak
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+            <button @click="closeImportPopup()"
+                    class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
+            <h3 class="text-xl font-bold mb-4">Importar desde Excel</h3>
+            <form action="{{ route('facturation.consumo.importar') }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+              @csrf
+              <div class="mb-4">
+                <label class="block mb-1">Archivo (.xls, .xlsx)</label>
+                <input type="file" name="file" accept=".xls,.xlsx"
+                       class="w-full p-2 border rounded" required>
+              </div>
+              <div class="flex justify-end space-x-2">
+                <button @click.prevent="closeImportPopup()"
+                        type="button"
+                        class="px-4 py-2 border rounded">Cancelar</button>
+                <button type="submit"
+                        class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
+                  Importar
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 
@@ -212,35 +236,32 @@
     <script>
     function facturaManager() {
       return {
+        // datos para filtros
         ciudades:    @json($ciudades),
         allSectores: @json($allSectores),
         allManzanas: @json($allManzanas),
         sectores:    [],
         manzanas:    [],
 
-        // Pops Emitir
+        // Emitir
         isPopupOpen: false,
         form: { ciudad_id: '', sector_id: '', manzana_id: '' },
-
-        openPopup()  { this.isPopupOpen = true; },
+        openPopup()  { this.isPopupOpen = true;  },
         closePopup() { this.isPopupOpen = false; },
-
         filterSectores() {
           this.sectores = this.allSectores.filter(s =>
             s.id_ciudad == this.form.ciudad_id
           );
-          this.form.sector_id  = '';
-          this.manzanas         = [];
-          this.form.manzana_id  = '';
+          this.form.sector_id = '';
+          this.manzanas       = [];
+          this.form.manzana_id= '';
         },
-
         filterManzanas() {
           this.manzanas = this.allManzanas.filter(m =>
             m.id_sector == this.form.sector_id
           );
           this.form.manzana_id = '';
         },
-
         submitEmit() {
           axios.post('{{ route("facturation.consumo.emitir") }}', this.form)
                .then(res => {
@@ -251,29 +272,25 @@
                .catch(console.error);
         },
 
-        // Pops Exportar
+        // Exportar
         isExportPopupOpen: false,
         exportForm: { ciudad_id: '', sector_id: '', manzana_id: '', month: '' },
-
-        openExportPopup()  { this.isExportPopupOpen = true; },
+        openExportPopup()  { this.isExportPopupOpen = true;  },
         closeExportPopup() { this.isExportPopupOpen = false; },
-
         filterSectoresExport() {
           this.sectores = this.allSectores.filter(s =>
             s.id_ciudad == this.exportForm.ciudad_id
           );
-          this.exportForm.sector_id  = '';
-          this.manzanas              = [];
-          this.exportForm.manzana_id = '';
+          this.exportForm.sector_id = '';
+          this.manzanas             = [];
+          this.exportForm.manzana_id= '';
         },
-
         filterManzanasExport() {
           this.manzanas = this.allManzanas.filter(m =>
             m.id_sector == this.exportForm.sector_id
           );
           this.exportForm.manzana_id = '';
         },
-
         submitExport() {
           if (!this.exportForm.month) {
             this.exportForm.month = new Date().toISOString().slice(0,7);
@@ -281,6 +298,11 @@
           const qs = new URLSearchParams(this.exportForm).toString();
           window.location = '{{ route("facturation.consumo.exportar") }}?' + qs;
         },
+
+        // Importar
+        isImportPopupOpen: false,
+        openImportPopup()  { this.isImportPopupOpen = true;  },
+        closeImportPopup() { this.isImportPopupOpen = false; },
       }
     }
     </script>
