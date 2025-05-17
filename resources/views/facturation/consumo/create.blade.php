@@ -19,6 +19,7 @@
       <form action="{{ route('facturation.consumo.store') }}" method="POST" class="space-y-4">
         @csrf
 
+        {{-- Cliente --}}
         <div>
           <label for="cliente_id" class="block font-medium">Cliente</label>
           <select name="cliente_id" id="cliente_id"
@@ -33,6 +34,7 @@
           </select>
         </div>
 
+        {{-- m³ Consumidos --}}
         <div>
           <label for="m3_consumidos" class="block font-medium">m³ Consumidos</label>
           <input type="number" name="m3_consumidos" id="m3_consumidos"
@@ -40,12 +42,37 @@
                  value="{{ old('m3_consumidos') }}">
         </div>
 
+        {{-- Fecha y Hora de Registro --}}
         <div>
-          <label for="hora_registro_consumo" class="block font-medium">Fecha y Hora</label>
+          <label for="hora_registro_consumo" class="block font-medium">Fecha y Hora de Registro</label>
           <input type="datetime-local" name="hora_registro_consumo"
                  id="hora_registro_consumo"
                  class="mt-1 block w-full border-gray-300 rounded"
                  value="{{ old('hora_registro_consumo') }}">
+        </div>
+
+        {{-- Fecha de Emisión --}}
+        <div>
+          <label for="fecha_emision" class="block font-medium">Fecha de Emisión</label>
+          <input type="date" name="fecha_emision" id="fecha_emision"
+                 class="mt-1 block w-full border-gray-300 rounded"
+                 value="{{ old('fecha_emision') }}">
+        </div>
+
+        {{-- Fecha de Vencimiento --}}
+        <div>
+          <label for="fecha_vencimiento" class="block font-medium">Fecha de Vencimiento</label>
+          <input type="date" name="fecha_vencimiento" id="fecha_vencimiento"
+                 class="mt-1 block w-full border-gray-300 rounded"
+                 value="{{ old('fecha_vencimiento') }}">
+        </div>
+
+        {{-- Valor --}}
+        <div>
+          <label for="valor" class="block font-medium">Valor S/.</label>
+          <input type="text" name="valor" id="valor"
+                 class="mt-1 block w-full border-gray-300 rounded"
+                 value="{{ old('valor') }}">
         </div>
 
         <div class="flex items-center space-x-4">
@@ -60,4 +87,4 @@
         </div>
       </form>
     </div>
-  </x-app-layout>
+</x-app-layout>
