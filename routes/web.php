@@ -263,6 +263,11 @@ Route::middleware('auth')->group(function () {
      ->name('consulta-factura.descargar');
 
 
+
+
+     
+
+
 });
 
 require __DIR__ . '/auth.php';
