@@ -14,11 +14,7 @@ $menu = [
                 'route' => 'gestion.clientes.index',
                 'icon' => 'default',
             ],
-            [
-                'title' => 'Registrar nuevo cliente',
-                'route' => 'gestion.clientes.create',
-                'icon' => 'default',
-            ],
+           
 
         ],
     ],
@@ -29,7 +25,7 @@ $menu = [
         'children' => [
             [
                 'title' => 'Eminisión de facturas',
-           
+
                 'icon' => 'default',
             ],
             [
