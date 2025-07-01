@@ -19,6 +19,7 @@ use App\Http\Controllers\TecnicoController;
 use App\Http\Controllers\ConsumoController;
 use App\Http\Controllers\ValorGeneralController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FacturacionEmitir;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,7 @@ Route::middleware('auth')->group(function () {
         ->controller(GestionClienteController::class)
         ->group(function () {
             Route::get('/',          'index')->name('index');
+            Route::get('/datatable',          'datatable')->name('datatable');
             Route::post('/',         'store')->name('store');
             Route::put('{cliente}',  'update')->name('update');
             Route::delete('{cliente}', 'destroy')->name('destroy');
@@ -249,14 +251,19 @@ Route::middleware('auth')->group(function () {
 
 
     Route::post('facturation/consumo/emitir', [ConsumoController::class, 'emitir'])
-     ->name('facturation.consumo.emitir');
+        ->name('facturation.consumo.emitir');
 
-     Route::get('facturation/consumo/exportar',
-     [ConsumoController::class, 'exportar'])
-   ->name('facturation.consumo.exportar');
+    Route::get('facturation/emitir', [FacturacionEmitir::class, 'index'])
+        ->name('facturation.emitir.index');
 
-   Route::post('facturation/consumo/importar', [ConsumoController::class, 'importar'])
-     ->name('facturation.consumo.importar');
+    Route::get(
+        'facturation/consumo/exportar',
+        [ConsumoController::class, 'exportar']
+    )
+        ->name('facturation.consumo.exportar');
+
+    Route::post('facturation/consumo/importar', [ConsumoController::class, 'importar'])
+        ->name('facturation.consumo.importar');
 
     Route::resource('facturation/consumo', ConsumoController::class, [
         'as' => 'facturation'
@@ -267,27 +274,17 @@ Route::middleware('auth')->group(function () {
 
 
 
-      // Mostrar formulario único de edición
-    Route::get('facturation/valores', [ValorGeneralController::class,'editAll'])
-    ->name('valores.editAll');
+    // Mostrar formulario único de edición
+    Route::get('facturation/valores', [ValorGeneralController::class, 'editAll'])
+        ->name('valores.editAll');
 
-// Procesar la actualización en bloque
-Route::put('facturation/valores', [ValorGeneralController::class,'updateAll'])
-    ->name('valores.updateAll');
-
-
-
-
-
-
-
-
-
-
+    // Procesar la actualización en bloque
+    Route::put('facturation/valores', [ValorGeneralController::class, 'updateAll'])
+        ->name('valores.updateAll');
 });
 
 Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])
-->name('consulta-factura.descargar');
+    ->name('consulta-factura.descargar');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/api.php';

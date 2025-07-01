@@ -16,3 +16,7 @@
     @apply [&.active]:after:bg-[--color]/5 [&.active]:after:border-[--color]/20;
     @apply [--color:var(--color-primary)];
 }
+
+.table-tool {
+    @apply grid grid-cols-2 gap-4;
+}

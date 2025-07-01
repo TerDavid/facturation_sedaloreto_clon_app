@@ -4,12 +4,21 @@
             {{ __('Manzanas del sector: ') }} {{ $sector?->sector }}
         </h2>
     </x-slot>
+    <x-html.title-page>
+        {{ __('Manzanas del sector: ') }} {{ $sector?->sector }}
+    </x-html.title-page>
 
-    <div class="p-6">
-        <a href="{{ route('manzana.create', ['sector_id' => $sector->id ?? 0]) }}"
-            class="px-4 py-2 bg-blue-600 hover:bg-green-700 text-white rounded">
-             Crear Manzana
-         </a>
+    <div class="py-6">
+        <div class="flex gap-4">
+            <a href="{{ route('manzana.create', ['sector_id' => $sector->id ?? 0]) }}"
+                class="px-4 py-2 bg-blue-600 hover:bg-green-700 text-white rounded">
+                Crear Manzana
+            </a>
+            <a href="{{ route('sector.index', ['ciudad_id' => $sector->id_ciudad ?? 0]) }}"
+                class="px-4 py-2 bg-blue-600 hover:bg-green-700 text-white rounded">
+                Ver sectores
+            </a>
+        </div>
 
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
@@ -28,35 +37,35 @@
                 </thead>
                 <tbody>
                     @forelse($manzanas as $manzana)
-                    <tr class="bg-blue-500 border-b border-blue-400">
-                        <td class="px-6 py-4 text-center">{{ $manzana->id }}</td>
-                        <td class="px-6 py-4 text-center font-medium text-blue-50">{{ $manzana->manzana }}</td>
-                        <td class="px-6 py-4 text-center">{{ $manzana->sector->sector ?? '-' }}</td>
-                        <td class="px-6 py-4 text-center">{{ $manzana->sector->reservorio->reservorio ?? '-' }}</td>
-                        <td class="px-6 py-4 text-center">{{ $manzana->sector->reservorio->bomba->bomba ?? '-' }}</td>
-                        <td class="px-6 py-4 text-center">{{ $manzana->sector->reservorio->bomba->ciudad->nombre ?? '-' }}</td>
-                        <td class="px-6 py-4 text-center space-x-2">
-                            <a href="{{ route('manzana.edit', $manzana) }}"
-                               class="font-medium text-white hover:underline">Editar</a>
-                            <form action="{{ route('manzana.destroy', $manzana) }}"
-                                  method="POST"
-                                  class="inline-block"
-                                  onsubmit="return confirm('¿Eliminar esta manzana?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="font-medium text-white hover:underline">
-                                    Eliminar
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-300">
-                            No hay manzanas creadas.
-                        </td>
-                    </tr>
-                @endforelse
+                        <tr class="bg-blue-500 border-b border-blue-400">
+                            <td class="px-6 py-4 text-center">{{ $manzana->id }}</td>
+                            <td class="px-6 py-4 text-center font-medium text-blue-50">{{ $manzana->manzana }}</td>
+                            <td class="px-6 py-4 text-center">{{ $manzana->sector->sector ?? '-' }}</td>
+                            <td class="px-6 py-4 text-center">{{ $manzana->sector->reservorio->reservorio ?? '-' }}</td>
+                            <td class="px-6 py-4 text-center">{{ $manzana->sector->reservorio->bomba->bomba ?? '-' }}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                {{ $manzana->sector->reservorio->bomba->ciudad->nombre ?? '-' }}</td>
+                            <td class="px-6 py-4 text-center space-x-2">
+                                <a href="{{ route('manzana.edit', $manzana) }}"
+                                    class="font-medium text-white hover:underline">Editar</a>
+                                <form action="{{ route('manzana.destroy', $manzana) }}" method="POST"
+                                    class="inline-block" onsubmit="return confirm('¿Eliminar esta manzana?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="font-medium text-white hover:underline">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-300">
+                                No hay manzanas creadas.
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
             </table>

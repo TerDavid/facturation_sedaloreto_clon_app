@@ -62,7 +62,7 @@
       <!-- Email Address -->
       <div class="mb-4">
         <x-input-label for="email" :value="__('Email')" />
-        <x-text-input
+        <x-input-text
           id="email"
           class="block mt-1 w-full"
           type="email"
@@ -78,7 +78,7 @@
       <!-- Password -->
       <div class="mt-4 mb-4">
         <x-input-label for="password" :value="__('Password')" />
-        <x-text-input
+        <x-input-text
           id="password"
           class="block mt-1 w-full"
           type="password"

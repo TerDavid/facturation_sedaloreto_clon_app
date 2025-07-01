@@ -4,23 +4,26 @@
             {{ __('Sectores de la ciudad: ') }} {{ $ciudad->nombre }}
         </h2>
     </x-slot>
-
-    <div class="p-6">
+    <x-html.title-page>
+        {{ __('Sectores de la ciudad: ') }} {{ $ciudad->nombre }}
+    </x-html.title-page>
+    <div class="py-6">
         {{-- Botones para crear nuevos registros --}}
-        <div class="flex flex-col items-start space-y-4 mb-6
+        <div
+            class="flex flex-col items-start space-y-4 mb-6
                     md:flex-row md:space-x-4 md:space-y-0 md:items-center">
-                    <a href="{{ route('sector.create', ['ciudad_id' => request('ciudad_id')]) }}"
-                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
-                         Crear Sector
-                     </a>
-                     <a href="{{ route('reservorio.index', ['ciudad_id' => request('ciudad_id')]) }}"
-                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
-                         Crear Reservorio
-                     </a>
-                     <a href="{{ route('bomba-agua.create', ['ciudad_id' => request('ciudad_id')]) }}"
-                        class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
-                         Crear Bomba
-                     </a>
+            <a href="{{ route('sector.create', ['ciudad_id' => request('ciudad_id')]) }}"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                Crear Sector
+            </a>
+            <a href="{{ route('reservorio.index', ['ciudad_id' => request('ciudad_id')]) }}"
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
+                Crear Reservorio
+            </a>
+            <a href="{{ route('bomba-agua.create', ['ciudad_id' => request('ciudad_id')]) }}"
+                class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
+                Crear Bomba
+            </a>
 
         </div>
 
@@ -39,11 +42,12 @@
                 <tbody>
                     @forelse($sectores as $sector)
                         <tr class="bg-blue-500 border-b border-blue-400">
-                            <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
                                 <div class="flex items-center space-x-2">
                                     <span>{{ $sector->sector }}</span>
                                     <a href="{{ route('manzana.index', ['sector_id' => $sector->id]) }}"
-                                       class="px-2 py-1 bg-blue-700 hover:bg-blue-800 text-white rounded text-sm">
+                                        class="px-2 py-1 bg-blue-700 hover:bg-blue-800 text-white rounded text-sm">
                                         Manzanas
                                     </a>
                                 </div>
@@ -53,7 +57,7 @@
                             <td class="px-6 py-4">{{ $sector->reservorio->bomba->ciudad->nombre }}</td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('sector.edit', $sector) }}"
-                                   class="font-medium text-white hover:underline">
+                                    class="font-medium text-white hover:underline">
                                     Editar Sector
                                 </a>
                             </td>
