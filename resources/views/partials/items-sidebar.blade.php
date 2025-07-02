@@ -61,7 +61,7 @@
                                         @if ($child['icon'] === 'default')
                                             <i data-lucide="circle-gauge"></i>
                                         @else
-                                            <i data-lucide="{{ $item['icon'] }}"></i>
+                                            <i data-lucide="{{ $child['icon'] }}"></i>
                                         @endif
                                     @endif
                                     <div class="side-menu__link__title">

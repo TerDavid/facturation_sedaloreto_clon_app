@@ -13,7 +13,7 @@ $menu = [
             [
                 'title' => 'ver Graficos',
                 'route' => 'dashboard',
-                'icon' => 'bar-chart-2',
+                'icon' => 'chart-pie',
             ],
 
 
@@ -41,6 +41,11 @@ $menu = [
             [
                 'title' => 'Eminisión de facturas',
                 'route' => 'facturation.consumo.index',
+                'icon' => 'file-text',
+            ],
+            [
+                'title' => 'Emitir',
+                'route' => 'facturation.emitir.index',
                 'icon' => 'file-text',
             ],
             [

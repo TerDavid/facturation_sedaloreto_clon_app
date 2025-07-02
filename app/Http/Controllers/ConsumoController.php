@@ -204,8 +204,9 @@ class ConsumoController extends Controller
 
         // 1) Determinar si el cliente tiene medidor
         $tieneMedidor = $cliente->medidor()->exists();
-
+        // dd($tieneMedidor);
         if (! $tieneMedidor) {
+
             // --- SIN MEDIDOR: bloque fijo, usar id_consumo_sin_medidor ---
             $cs = $cliente->consumoSinMedidor;
             if (! $cs) {
@@ -232,6 +233,8 @@ class ConsumoController extends Controller
             }
 
             $aguaMonto = round($m3 * $t->tarifa_agua,       2);
+            // dd($consumo, $consumo->valor, $t->tarifa_alcantarillado, $m3);
+            // $aguaMonto = round($consumo->valor,       2);
             $alcMonto  = round($m3 * $t->tarifa_alcantarillado, 2);
             $fijoMonto = round($t->cargo_fijo,              2);
             $total     = round($aguaMonto + $alcMonto + $fijoMonto, 2);
@@ -242,37 +245,39 @@ class ConsumoController extends Controller
             ];
 
             return [$total, $conceptos];
+        } else {
+            // dd('asdasd');
+                    // --- CON MEDIDOR: cobro por lectura real ---
+                    $m3 = $consumo->m3_consumidos ?? 0;
+
+                    $t = Tarifa::where('categoria', $categoria)
+                               ->where('rango_min','<=',$m3)
+                               ->where(fn($q) =>
+                                   $q->whereNull('rango_max')
+                                     ->orWhere('rango_max','>=',$m3)
+                               )
+                               ->first();
+
+                    if (! $t) {
+                        return [0, []];
+                    }
+
+                    $aguaMonto = round($m3 * $t->tarifa_agua,       2);
+                    $alcMonto  = round($m3 * $t->tarifa_alcantarillado, 2);
+                    $fijoMonto = round($t->cargo_fijo,              2);
+                    $total     = round($aguaMonto + $alcMonto + $fijoMonto, 2);
+
+                    $conceptos = [
+                        ['concepto' => "Agua ({$m3} m³)",        'monto' => $aguaMonto],
+                        ['concepto' => 'Alcantarillado',         'monto' => $alcMonto],
+                        ['concepto' => 'Cargo fijo mensual',     'monto' => $fijoMonto],
+                    ];
+
+                    return [$total, $conceptos];
         }
 
-        // --- CON MEDIDOR: cobro por lectura real ---
-        $m3 = $consumo->m3_consumidos ?? 0;
-
-        $t = Tarifa::where('categoria', $categoria)
-                   ->where('rango_min','<=',$m3)
-                   ->where(fn($q) =>
-                       $q->whereNull('rango_max')
-                         ->orWhere('rango_max','>=',$m3)
-                   )
-                   ->first();
-
-        if (! $t) {
-            return [0, []];
-        }
-
-        $aguaMonto = round($m3 * $t->tarifa_agua,       2);
-        $alcMonto  = round($m3 * $t->tarifa_alcantarillado, 2);
-        $fijoMonto = round($t->cargo_fijo,              2);
-        $total     = round($aguaMonto + $alcMonto + $fijoMonto, 2);
-
-        $conceptos = [
-            ['concepto' => "Agua ({$m3} m³)",        'monto' => $aguaMonto],
-            ['concepto' => 'Alcantarillado',         'monto' => $alcMonto],
-            ['concepto' => 'Cargo fijo mensual',     'monto' => $fijoMonto],
-        ];
-
-        return [$total, $conceptos];
     }
-    
+
 
 
 }

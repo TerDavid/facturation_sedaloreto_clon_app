@@ -29,7 +29,7 @@
         </div>
       </form>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-6">
 
         {{-- Gráfica 1: Volumen total --}}
         <div class="bg-white shadow-sm rounded-lg p-6">
@@ -40,7 +40,7 @@
         </div>
 
         {{-- Gráfica 2: Evolución mensual (Barras agrupadas) --}}
-        <div class="bg-white shadow-sm rounded-lg p-6 sm:col-span-2">
+        <div class="bg-white shadow-sm rounded-lg p-6 ">
           <h3 class="font-semibold text-lg mb-3">
             Evolución Mensual de Valor Facturado por Ciudad
           </h3>
@@ -48,7 +48,7 @@
         </div>
 
         {{-- Gráfica 3: Clientes activos --}}
-        <div class="bg-white shadow-sm rounded-lg p-6 sm:col-span-2">
+        <div class="bg-white shadow-sm rounded-lg p-6 ">
           <h3 class="font-semibold text-lg mb-3">
             Número de Clientes con Facturas en el Rango por Ciudad
           </h3>

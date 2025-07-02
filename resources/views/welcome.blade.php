@@ -52,8 +52,8 @@
 
         <div>
           <label for="codigo" class="block font-bold mb-1">Código de suministro</label>
-          <input id="codigo" name="codigo" type="text" value="{{ old('codigo') }}" required placeholder="Ingrese su código"
-                 class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror">
+          <x-input-text id="codigo" name="codigo" type="text" value="{{ old('codigo') }}" required placeholder="Ingrese su código"
+                 class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror"/>
           @error('codigo')
             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
           @enderror
@@ -61,7 +61,7 @@
 
         <div>
           <label for="ciudad" class="block font-bold mb-1">Ciudad</label>
-          <select id="ciudad" name="ciudad" required
+          <x-form.select id="ciudad" name="ciudad" required
                   class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('ciudad') border-red-500 @enderror">
             <option value="" disabled {{ !old('ciudad') ? 'selected' : '' }}>
               Seleccione una ciudad
@@ -71,7 +71,7 @@
                 {{ $c->nombre }}
               </option>
             @endforeach
-          </select>
+          </x-form.select>
           @error('ciudad')
             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
           @enderror
@@ -91,10 +91,11 @@
         <h2 class="text-xl font-bold mb-4">
           Consumo {{ \Carbon\Carbon::parse($consumo->fecha_emision)->locale('es')->isoFormat('MMMM YYYY') }}
         </h2>
+        {{-- @dd($consumo) --}}
         <ul class="space-y-2 text-gray-800 mb-4">
           <li><strong>Consumo (m³):</strong> {{ $consumo->m3_consumidos ?? '–' }}</li>
-          <li><strong>Emisión:</strong> {{ optional($consumo->fecha_emision)->format('d/m/Y') ?? '–' }}</li>
-          <li><strong>Vencimiento:</strong> {{ optional($consumo->fecha_vencimiento)->format('d/m/Y') ?? '–' }}</li>
+          <li><strong>Emisión:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_emision)->format('d/m/Y') ?? '' }}</li>
+          <li><strong>Vencimiento:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_vencimiento)->format('d/m/Y') ?? '–' }}</li>
           <li><strong>Valor a pagar:</strong> S/ {{ number_format($consumo->valor, 2) }}</li>
           <li><strong>Código suministro:</strong> {{ $consumo->cliente->code_suministro }}</li>
           <li><strong>Ciudad cliente:</strong> {{ $consumo->cliente->manzana->ciudad->nombre }}</li>

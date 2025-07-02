@@ -21,6 +21,12 @@
             return `{{ url('') }}/${path}`;
         };
     </script>
+    <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/datatables.min.css" rel="stylesheet"
+        integrity="sha384-ID3kMc8jYTLMDPSraRAbPqgOGon/0voEovkAkMYuH+WWysdr5zglZoTsVflnAxE3" crossorigin="anonymous">
+    
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 </head>
 
 <body
@@ -52,11 +58,30 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/datatables.min.js"
+        integrity="sha384-3NhbAYxvvAIqeJEOYATEIaw/HIbz2SBJ2HL4qZsYKPWC5gYGakASn7yB6olDqe4Z" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/js/utils.js'])
+
     <script src="{{ asset('js/vendor/dom.js') }}"></script>
     <script src="{{ asset('js/vendor/simplebar.js') }}"></script>
     <script src="{{ asset('js/vendor/enigma.js') }}"></script>
+    
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <!-- Toast Component -->
+    <x-toast />
+    
     @yield('scripts')
+    @vite(['resources/js/appfooter.js'])
+
+    
 </body>
 
 </html>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
+@import "toastify-js/src/toastify.css";
 
 @layer properties;
 @layer theme, base, components, utilities;
-
 @layer theme {
 
     :root,
