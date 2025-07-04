@@ -18,6 +18,10 @@ return new class extends Migration
 
             // Datos básicos
             $table->string('nombre');
+            $table->string('apellido');  // nueva columna
+            $table->string('dni')
+                  ->unique()
+                  ->comment('Documento Nacional de Identidad');  // nueva columna
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();
             $table->string('email')->nullable()->unique();
@@ -32,14 +36,15 @@ return new class extends Migration
             $table->enum('categoria', ['DOMESTICO','SOCIAL','COMERCIAL','INDUSTRIAL','ESTATAL'])
                   ->comment('Categoría tarifaria asignada al cliente');
 
-            // Relación a la tarifa cuando el cliente tiene medidor
+            // Relación a la tarifa cuando el cliente tiene medidor (ahora nullable)
             $table->foreignId('tarifa_id')
+                  ->nullable()                                // ← aquí
                   ->constrained('tarifas')
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete()
                   ->comment('Tarifa aplicable cuando hay medidor');
 
-            // Si NO tiene medidor, vínculo con consumos_sin_medidor
+            // Si NO tiene medidor, vínculo con consumos_sin_medidor (ya nullable)
             $table->foreignId('id_consumo_sin_medidor')
                   ->nullable()
                   ->constrained('consumos_sin_medidor')

@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Catalogs\Country;
+use App\Models\Catalogs\Department;
+use App\Models\Catalogs\District;
+use App\Models\Catalogs\Province;
+
+class Establishment extends Model
+{
+    protected $with = ['country', 'department', 'province', 'district'];
+    protected $fillable = [
+        'description',
+        'country_id',
+        'department_id',
+        'province_id',
+        'district_id',
+        'address',
+        'email',
+        'telephone',
+        'code',
+        'establishment_description'
+    ];
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function getAddressFullAttribute()
+    {
+        $address = ($this->address != '-') ? $this->address . ' ,' : '';
+        return "{$address} {$this->department->description} - {$this->province->description} - {$this->district->description}";
+    }
+
+    public function getAddressFullAttribute2()
+    {
+        $code = ($this->code != '') ? $this->code : '';
+        $address = ($this->address != '-') ? $this->address : '';
+        return "{$code} - {$address}";
+    }
+
+    public function getAddressFullAttribute3()
+    {
+        //$address = ($this->address != '-')? $this->address.' ,' : '';
+        return "{$this->department->description} - {$this->province->description} - {$this->district->description}";
+    }
+
+    // public function establishment_item()
+    // {
+    //     return $this->hasMany(EstablishmentItem::class);
+    // }
+}

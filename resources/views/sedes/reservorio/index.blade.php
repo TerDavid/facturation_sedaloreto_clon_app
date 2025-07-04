@@ -4,20 +4,27 @@
             {{ __('Listado de Reservorios') }}
         </h2>
     </x-slot>
-
-    <div class="p-6">
-        @if(session('success'))
+    <x-html.title-page>
+        {{ __('Listado de Reservorios') }}
+    </x-html.title-page>
+    <div class="py-6">
+        @if (session('success'))
             <div class="mb-4 p-3 bg-green-800 text-green-200 rounded">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('reservorio.create', ['ciudad_id' => request('ciudad_id')]) }}"
-            class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">
-             Nuevo Reservorio
-         </a>
+        <div class="flex gap-4">
+            <a href="{{ route('reservorio.create', ['ciudad_id' => request('ciudad_id')]) }}"
+                class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded">
+                Nuevo Reservorio
+            </a>
 
-
+            <a href="{{ route('sector.index', ['ciudad_id' => request('ciudad_id')]) }}"
+                class="inline-block mb-4 px-4 py-2 bg-red-600 text-white rounded">
+                Regresar
+            </a>
+        </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100">
                 <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
@@ -30,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($reservorios as $r)
+                    @foreach ($reservorios as $r)
                         <tr class="bg-blue-500 border-b border-blue-400">
                             <td class="px-6 py-4 text-center">{{ $r->id }}</td>
                             <td class="px-6 py-4 text-center font-medium whitespace-nowrap">
@@ -46,15 +53,13 @@
                                 {{-- <a href="{{ route('reservorio.show', ['reservorio' => $r->id, 'ciudad_id' => request('ciudad_id')]) }}"
                                     class="font-medium text-white hover:underline">Ver</a> --}}
 
-                                 <a href="{{ route('reservorio.edit', ['reservorio' => $r->id, 'ciudad_id' => request('ciudad_id')]) }}"
+                                <a href="{{ route('reservorio.edit', ['reservorio' => $r->id, 'ciudad_id' => request('ciudad_id')]) }}"
                                     class="font-medium text-white hover:underline">Editar</a>
 
-                                <form action="{{ route('reservorio.destroy', $r) }}"
-                                      method="POST" class="inline">
+                                <form action="{{ route('reservorio.destroy', $r) }}" method="POST" class="inline">
                                     @csrf @method('DELETE')
-                                    <button type="submit"
-                                            class="font-medium text-white hover:underline"
-                                            onclick="return confirm('¿Seguro?')">
+                                    <button type="submit" class="font-medium text-white hover:underline"
+                                        onclick="return confirm('¿Seguro?')">
                                         Eliminar
                                     </button>
                                 </form>

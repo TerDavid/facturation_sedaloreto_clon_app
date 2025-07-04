@@ -4,18 +4,19 @@
             {{ __('Crear Manzana') }}
         </h2>
     </x-slot>
-
-    <div class="p-6 bg-white">
-        <form action="{{ route('manzana.store') }}" method="POST" class="max-w-md mx-auto">
+    <x-html.title-page>
+        {{ __('Crear Manzana') }}
+    </x-html.title-page>
+    <div class="py-6 bg-white">
+        <form action="{{ route('manzana.store') }}" method="POST" class="max-w-md mx-autox">
             @csrf
 
             {{-- Campo: Nombre de Manzana --}}
             <div class="mb-5">
                 <label for="manzana" class="block mb-2 text-sm font-medium text-gray-900">Nombre de la Manzana</label>
-                <input type="text" name="manzana" id="manzana"
-                       value="{{ old('manzana') }}"
-                       class="block w-full p-3 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"
-                       required>
+                <input type="text" name="manzana" id="manzana" value="{{ old('manzana') }}"
+                    class="block w-full p-3 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"
+                    required>
                 @error('manzana')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -38,10 +39,15 @@
             <input type="hidden" name="id_ciudad" value="{{ $ciudad->id }}">
 
             {{-- Botón --}}
-            <div class="mt-6">
+            <div class="mt-6 flex gap-4">
                 <button type="submit"
-                        class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition">
+                    class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition">
                     Guardar
+                </button>
+                <button type="button"
+                    onclick="window.location='{{ route('manzana.index', ['sector_id' => request('sector_id')]) }}'""
+                    class="w-full px-4 py-2 bg-red-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition">
+                    Cancelar
                 </button>
             </div>
         </form>

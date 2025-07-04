@@ -16,6 +16,10 @@ use App\Http\Controllers\GestionController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\SectorRelationController;
 use App\Http\Controllers\TecnicoController;
+use App\Http\Controllers\ConsumoController;
+use App\Http\Controllers\ValorGeneralController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FacturacionEmitir;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +40,11 @@ Route::post('/', [ConsultaFacturaController::class, 'consultar'])
 | Dashboard y perfil
 |--------------------------------------------------------------------------
 */
-Route::get('/dashboard', fn() => view('dashboard'))
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     // Perfil
@@ -84,7 +90,7 @@ Route::middleware('auth')->group(function () {
         ->name('gestion_clientes2.')
         ->controller(GestionClienteController::class)
         ->group(function () {
-            Route::get('/',              'index2')->name('index2');
+            Route::get('/',              'index')->name('index');
         });
 
     Route::prefix('medidores/gestion')
@@ -94,13 +100,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/',              'indexSelectCity')->name('index');
         });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Clientes y Medidores
-    |--------------------------------------------------------------------------
-    */
-    // Route::get('clientes', [ClienteController::class,'index'])
-    //      ->name('clientes.index');
+
 
     // — Gestión de Clientes SIN {ciudad} en la URI
     Route::prefix('clientes/gestion')
@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
         ->controller(GestionClienteController::class)
         ->group(function () {
             Route::get('/',          'index')->name('index');
+            Route::get('/datatable',          'datatable')->name('datatable');
             Route::post('/',         'store')->name('store');
             Route::put('{cliente}',  'update')->name('update');
             Route::delete('{cliente}', 'destroy')->name('destroy');
@@ -241,22 +242,49 @@ Route::middleware('auth')->group(function () {
 
     // Route::resource('tecnico', TecnicoController::class);
 
-    Route::prefix('gestion')
-        ->name('gestion.')
-        // ->controller(GestionController::class)
-        ->group(function () {
-            Route::prefix('clientes')
-                ->name('clientes.')
-                ->controller(GestionClienteController::class)
-                ->group(function () {
-                    Route::get('/', 'index2')->name('index');
-                    Route::get('create', 'create')->name('create');
-                    Route::post('store', 'store')->name('store');
-                });
-            // Route::get('clientes/create', 'clientes')->name('clientes');
-            // Route::get('clientes', 'clientes_create')->name('clientes.create');
-        });
+    Route::resource(
+        'gestion/clientes',
+        GestionClienteController::class,
+        ['as' => 'gestion']    // prefijo para los names
+    );
+
+
+
+    Route::post('facturation/consumo/emitir', [ConsumoController::class, 'emitir'])
+        ->name('facturation.consumo.emitir');
+
+    Route::get('facturation/emitir', [FacturacionEmitir::class, 'index'])
+        ->name('facturation.emitir.index');
+
+    Route::get(
+        'facturation/consumo/exportar',
+        [ConsumoController::class, 'exportar']
+    )
+        ->name('facturation.consumo.exportar');
+
+    Route::post('facturation/consumo/importar', [ConsumoController::class, 'importar'])
+        ->name('facturation.consumo.importar');
+
+    Route::resource('facturation/consumo', ConsumoController::class, [
+        'as' => 'facturation'
+    ])->except(['show']);
+
+
+
+
+
+
+    // Mostrar formulario único de edición
+    Route::get('facturation/valores', [ValorGeneralController::class, 'editAll'])
+        ->name('valores.editAll');
+
+    // Procesar la actualización en bloque
+    Route::put('facturation/valores', [ValorGeneralController::class, 'updateAll'])
+        ->name('valores.updateAll');
 });
+
+Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])
+    ->name('consulta-factura.descargar');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/api.php';
