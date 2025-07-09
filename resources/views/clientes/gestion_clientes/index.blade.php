@@ -405,7 +405,7 @@
                             direccion: data.direccion,
                             telefono: data.telefono,
                             email: data.email,
-                            crear_medidor: data.tarifa_id ? 'true' : 'false',
+                            crear_medidor: !!data.tarifa_id,  // <-- aquí
                             medidor_codigo: data.medidor_codigo,
                             medidor_fecha_instalacion: data.medidor_fecha_instalacion,
                             ubicacion_detallada: data.ubicacion_detallada,
@@ -463,7 +463,7 @@
                             direccion: '',
                             telefono: '',
                             email: '',
-                            crear_medidor: false,
+                            crear_medidor: false,    
                             medidor_codigo: '',
                             medidor_fecha_instalacion: '',
                             ubicacion_detallada: '',
@@ -476,6 +476,13 @@
                         this.manzanas = [];
                         this.isOpen = true;
                     } else {
+
+                        this.form.crear_medidor = Boolean(cliente.tarifa_id)
+
+                        this.sectores = this.allSectores.filter(s =>
+                        s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
+                        )
+
                         Object.assign(this.form, cliente);
                         this.sectores = this.allSectores.filter(s =>
                             s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
