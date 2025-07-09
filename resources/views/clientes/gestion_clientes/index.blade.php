@@ -91,8 +91,12 @@
                         <div>
                             <label>DNI</label>
                             <input name="dni" x-model="form.dni" @input="updateCode()"
-                                class="w-full p-2 border rounded" required>
+                                    class="w-full p-2 border rounded" required>
+                            @error('dni')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
+
                         <div>
                             <label>Dirección</label>
                             <input name="direccion" x-model="form.direccion" class="w-full p-2 border rounded">
@@ -103,7 +107,11 @@
                         </div>
                         <div>
                             <label>Correo</label>
-                            <input type="email" name="email" x-model="form.email" class="w-full p-2 border rounded">
+                            <input type="email" name="email" x-model="form.email"
+                                    class="w-full p-2 border rounded">
+                            @error('email')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -165,7 +173,10 @@
                     <div class="mb-4">
                         <label>Código de Suministro</label>
                         <input name="code_suministro" x-model="form.code_suministro" readonly
-                            class="w-full p-2 border rounded bg-gray-100 cursor-not-allowed">
+                                class="w-full p-2 border rounded bg-gray-100 cursor-not-allowed">
+                        @error('code_suministro')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Botones --}}

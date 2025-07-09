@@ -60,4 +60,15 @@ class UpdateClienteRequest extends FormRequest
             'ubicacion_detallada'       => 'nullable|string|max:255',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'code_suministro.unique' => 'El código de suministro ya existe.',
+            'dni.unique'             => 'El DNI ya está registrado.',
+            'email.unique'           => 'El correo electrónico ya está en uso.',
+            // puedes añadir otros atributos aquí…
+        ];
+    }
+
 }
