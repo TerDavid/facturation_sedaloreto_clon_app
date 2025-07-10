@@ -43,11 +43,11 @@ $menu = [
                 'route' => 'facturation.consumo.index',
                 'icon' => 'file-text',
             ],
-            [
-                'title' => 'Emitir',
-                'route' => 'facturation.emitir.index',
-                'icon' => 'file-text',
-            ],
+            // [
+            //     'title' => 'Emitir',
+            //     'route' => 'facturation.emitir.index',
+            //     'icon' => 'file-text',
+            // ],
             [
                 'title' => 'Editar valores de facturación',
                 'route' => 'valores.editAll',

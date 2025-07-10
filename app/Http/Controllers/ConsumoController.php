@@ -26,8 +26,9 @@ class ConsumoController extends Controller
             'cliente.manzana.ciudad',
             'cliente.manzana.sector',
         ])
-        ->orderByDesc('hora_registro_consumo')
-        ->paginate(10);          // ← paginamos de 10 en 10
+        // Ordenar por fecha de emisión, de más reciente a más antiguo
+        ->orderByDesc('fecha_emision')
+        ->paginate(10);
 
     $ciudades    = Ciudad::orderBy('nombre')->get(['id','nombre']);
     $allSectores = Sector::orderBy('sector')->get(['id','id_ciudad','sector']);
