@@ -463,7 +463,7 @@
                             direccion: '',
                             telefono: '',
                             email: '',
-                            crear_medidor: false,    
+                            crear_medidor: false,
                             medidor_codigo: '',
                             medidor_fecha_instalacion: '',
                             ubicacion_detallada: '',
@@ -490,6 +490,8 @@
                         this.manzanas = this.allManzanas.filter(m =>
                             m.id_sector == cliente.sector_id
                         );
+
+
                         this.$nextTick(() => {
                             this.updateCode();
                             this.isOpen = true;
