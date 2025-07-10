@@ -1,3 +1,4 @@
+{{-- resources/views/welcome.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',app()->getLocale()) }}">
 <head>
@@ -51,10 +52,15 @@
 
         <div>
           <label for="codigo" class="block font-bold mb-1">Código de suministro</label>
-          <x-input-text id="codigo" name="codigo" type="text"
+          <x-input-text
+            id="codigo"
+            name="codigo"
+            type="text"
             value="{{ old('codigo', $data['codigo'] ?? '') }}"
-            required placeholder="Ingrese su código"
-            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror"/>
+            required
+            placeholder="Ingrese su código"
+            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror"
+          />
           @error('codigo')
             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
           @enderror
@@ -62,14 +68,20 @@
 
         <div>
           <label for="ciudad" class="block font-bold mb-1">Ciudad</label>
-          <x-form.select id="ciudad" name="ciudad" required
-            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('ciudad') border-red-500 @enderror">
+          <x-form.select
+            id="ciudad"
+            name="ciudad"
+            required
+            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('ciudad') border-red-500 @enderror"
+          >
             <option value="" disabled {{ !(old('ciudad') ?? $data['ciudad'] ?? false) ? 'selected' : '' }}>
               Seleccione una ciudad
             </option>
             @foreach($ciudades as $c)
-              <option value="{{ $c->id }}"
-                {{ (old('ciudad') ?? $data['ciudad'] ?? '') == $c->id ? 'selected' : '' }}>
+              <option
+                value="{{ $c->id }}"
+                {{ (old('ciudad') ?? $data['ciudad'] ?? '') == $c->id ? 'selected' : '' }}
+              >
                 {{ $c->nombre }}
               </option>
             @endforeach
@@ -79,7 +91,10 @@
           @enderror
         </div>
 
-        <button type="submit" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-md transition">
+        <button
+          type="submit"
+          class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-md transition"
+        >
           Consultar
         </button>
       </form>
@@ -96,8 +111,10 @@
               <input type="hidden" name="codigo"    value="{{ $data['codigo'] }}">
               <input type="hidden" name="ciudad"    value="{{ $data['ciudad'] }}">
               <input type="hidden" name="recibo_id" value="{{ $r->id }}">
-              <button type="submit"
-                class="px-3 py-1 rounded {{ isset($consumo) && $consumo->id === $r->id ? 'bg-red-600 text-white' : 'bg-gray-200' }} transition">
+              <button
+                type="submit"
+                class="px-3 py-1 rounded {{ isset($consumo) && $consumo->id === $r->id ? 'bg-red-600 text-white' : 'bg-gray-200' }} transition"
+              >
                 {{ \Carbon\Carbon::parse($r->fecha_emision)->locale('es')->isoFormat('MMMM YYYY') }}
               </button>
             </form>
@@ -108,10 +125,15 @@
 
     {{-- Resultado de la consulta --}}
     @isset($consumo)
-      <section x-data="{ show: true }" x-show="show"
-               class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-6 relative">
-        <button @click="show = false"
-                class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">×</button>
+      <section
+        x-data="{ show: true }"
+        x-show="show"
+        class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-6 relative"
+      >
+        <button
+          @click="show = false"
+          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold"
+        >×</button>
 
         <h2 class="text-xl font-bold mb-4">
           Consumo {{ \Carbon\Carbon::parse($consumo->fecha_emision)->locale('es')->isoFormat('MMMM YYYY') }}
@@ -125,8 +147,13 @@
           <li><strong>Ciudad cliente:</strong> {{ $consumo->cliente->manzana->ciudad->nombre }}</li>
         </ul>
 
-        <a href="{{ route('consulta-factura.descargar', ['codigo' => $consumo->cliente->code_suministro]) }}"
-           class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold">
+        <a
+          href="{{ route('consulta-factura.descargar', [
+            'codigo'    => $consumo->cliente->code_suministro,
+            'recibo_id' => $consumo->id,
+          ]) }}"
+          class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold"
+        >
           Descargar PDF
         </a>
       </section>
