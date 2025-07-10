@@ -373,7 +373,7 @@
                                 render: (d, t, r) => {
 
                                     // const t = JSON.stringify(r)
-                                    return `<button data class="btn-accion text-blue-400 hover:underline"  >Editar</button>
+                                    return `<button data class="btn-accion  text-blue-400 hover:underline" data-action="edit"  >Editar</button>
                                     <form method="POST" action="/clientes/gestion/${r.id}" class="inline" onsubmit="return confirm('¿Eliminar cliente?')">
                                         @csrf
                                         @method('DELETE')
@@ -388,12 +388,11 @@
                         },
                     });
                     let self = this;
-                    table.on('click', '.btn-accion', function() {
+                    table.on('click', '.btn-accion', function(e) {
 
                         //get row data
                         let row = table.row($(this).closest('tr'));
                         let data = row.data();
-
                         self.openForm('edit', {
                             id: data.id,
                             ciudad_id: data.ciudad_id,
@@ -476,21 +475,21 @@
                         this.manzanas = [];
                         this.isOpen = true;
                     } else {
-
                         this.form.crear_medidor = Boolean(cliente.tarifa_id)
 
                         this.sectores = this.allSectores.filter(s =>
                         s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
                         )
 
-                        Object.assign(this.form, cliente);
-                        this.sectores = this.allSectores.filter(s =>
-                            s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
-                        );
+
+                        // this.sectores = this.allSectores.filter(s =>
+                        //     s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
+                        // );
                         this.manzanas = this.allManzanas.filter(m =>
-                            m.id_sector == cliente.sector_id
+                            +m.id_sector == +cliente.sector_id
                         );
 
+                        Object.assign(this.form, cliente);
 
                         this.$nextTick(() => {
                             this.updateCode();
