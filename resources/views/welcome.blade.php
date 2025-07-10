@@ -1,4 +1,3 @@
-{{-- resources/views/consulta.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',app()->getLocale()) }}">
 <head>
@@ -35,7 +34,7 @@
   {{-- Contenedor principal --}}
   <div class="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center gap-8 pt-28">
 
-    {{-- Formulario --}}
+    {{-- Formulario de consulta --}}
     <main class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-6 md:p-8">
       <h1 class="uppercase text-black font-bold text-2xl md:text-4xl mb-6 text-center">
         Consulta consumo mes {{ \Carbon\Carbon::now()->locale('es')->isoFormat('MMMM') }}
@@ -52,8 +51,10 @@
 
         <div>
           <label for="codigo" class="block font-bold mb-1">Código de suministro</label>
-          <x-input-text id="codigo" name="codigo" type="text" value="{{ old('codigo') }}" required placeholder="Ingrese su código"
-                 class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror"/>
+          <x-input-text id="codigo" name="codigo" type="text"
+            value="{{ old('codigo', $data['codigo'] ?? '') }}"
+            required placeholder="Ingrese su código"
+            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('codigo') border-red-500 @enderror"/>
           @error('codigo')
             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
           @enderror
@@ -62,12 +63,13 @@
         <div>
           <label for="ciudad" class="block font-bold mb-1">Ciudad</label>
           <x-form.select id="ciudad" name="ciudad" required
-                  class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('ciudad') border-red-500 @enderror">
-            <option value="" disabled {{ !old('ciudad') ? 'selected' : '' }}>
+            class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500 @error('ciudad') border-red-500 @enderror">
+            <option value="" disabled {{ !(old('ciudad') ?? $data['ciudad'] ?? false) ? 'selected' : '' }}>
               Seleccione una ciudad
             </option>
             @foreach($ciudades as $c)
-              <option value="{{ $c->id }}" {{ old('ciudad') == $c->id ? 'selected' : '' }}>
+              <option value="{{ $c->id }}"
+                {{ (old('ciudad') ?? $data['ciudad'] ?? '') == $c->id ? 'selected' : '' }}>
                 {{ $c->nombre }}
               </option>
             @endforeach
@@ -83,19 +85,41 @@
       </form>
     </main>
 
-    {{-- Resultado --}}
+    {{-- Listado de recibos anteriores --}}
+    @if(isset($recibos) && $recibos->isNotEmpty())
+      <div class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-4">
+        <h3 class="font-bold mb-2">Recibos emitidos</h3>
+        <div class="flex flex-wrap gap-2">
+          @foreach($recibos as $r)
+            <form method="POST" action="{{ route('consulta-factura.consultar') }}">
+              @csrf
+              <input type="hidden" name="codigo"    value="{{ $data['codigo'] }}">
+              <input type="hidden" name="ciudad"    value="{{ $data['ciudad'] }}">
+              <input type="hidden" name="recibo_id" value="{{ $r->id }}">
+              <button type="submit"
+                class="px-3 py-1 rounded {{ isset($consumo) && $consumo->id === $r->id ? 'bg-red-600 text-white' : 'bg-gray-200' }} transition">
+                {{ \Carbon\Carbon::parse($r->fecha_emision)->locale('es')->isoFormat('MMMM YYYY') }}
+              </button>
+            </form>
+          @endforeach
+        </div>
+      </div>
+    @endif
+
+    {{-- Resultado de la consulta --}}
     @isset($consumo)
-      <section x-data="{ show: true }" x-show="show" class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-6 relative">
-        <button @click="show = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">×</button>
+      <section x-data="{ show: true }" x-show="show"
+               class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-90 rounded-lg shadow-lg p-6 relative">
+        <button @click="show = false"
+                class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">×</button>
 
         <h2 class="text-xl font-bold mb-4">
           Consumo {{ \Carbon\Carbon::parse($consumo->fecha_emision)->locale('es')->isoFormat('MMMM YYYY') }}
         </h2>
-        {{-- @dd($consumo) --}}
         <ul class="space-y-2 text-gray-800 mb-4">
           <li><strong>Consumo (m³):</strong> {{ $consumo->m3_consumidos ?? '–' }}</li>
-          <li><strong>Emisión:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_emision)->format('d/m/Y') ?? '' }}</li>
-          <li><strong>Vencimiento:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_vencimiento)->format('d/m/Y') ?? '–' }}</li>
+          <li><strong>Emisión:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_emision)->format('d/m/Y') }}</li>
+          <li><strong>Vencimiento:</strong> {{ \Carbon\Carbon::parse($consumo->fecha_vencimiento)->format('d/m/Y') }}</li>
           <li><strong>Valor a pagar:</strong> S/ {{ number_format($consumo->valor, 2) }}</li>
           <li><strong>Código suministro:</strong> {{ $consumo->cliente->code_suministro }}</li>
           <li><strong>Ciudad cliente:</strong> {{ $consumo->cliente->manzana->ciudad->nombre }}</li>
