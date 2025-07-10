@@ -56,9 +56,7 @@
             <button @click="closePopup()"
                     class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
             <h3 class="text-xl font-bold mb-4">Filtrar para emitir</h3>
-
             <div class="space-y-4">
-              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="form.ciudad_id" @change="filterSectores()"
@@ -69,7 +67,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="form.sector_id" @change="filterManzanas()"
@@ -80,30 +77,25 @@
                   </template>
                 </select>
               </div>
-              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
-                <select x-model="form.manzana_id"
-                        class="w-full p-2 border rounded">
+                <select x-model="form.manzana_id" class="w-full p-2 border rounded">
                   <option value="">→ Todas</option>
                   <template x-for="m in manzanas" :key="m.id">
                     <option :value="m.id" x-text="m.manzana"></option>
                   </template>
                 </select>
               </div>
-              {{-- Fecha de Emisión --}}
               <div>
                 <label class="block mb-1">Fecha de Emisión</label>
                 <input type="date" x-model="form.fecha_emision"
                        class="w-full p-2 border rounded"/>
               </div>
-              {{-- Fecha de Vencimiento --}}
               <div>
                 <label class="block mb-1">Fecha de Vencimiento</label>
                 <input type="date" x-model="form.fecha_vencimiento"
                        class="w-full p-2 border rounded"/>
               </div>
-              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closePopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -123,9 +115,7 @@
             <button @click="closeExportPopup()"
                     class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">✕</button>
             <h3 class="text-xl font-bold mb-4">Filtrar para exportar</h3>
-
             <div class="space-y-4">
-              {{-- Ciudad --}}
               <div>
                 <label class="block mb-1">Ciudad</label>
                 <select x-model="exportForm.ciudad_id" @change="filterSectoresExport()"
@@ -136,7 +126,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Sector --}}
               <div>
                 <label class="block mb-1">Sector</label>
                 <select x-model="exportForm.sector_id" @change="filterManzanasExport()"
@@ -147,7 +136,6 @@
                   </template>
                 </select>
               </div>
-              {{-- Manzana --}}
               <div>
                 <label class="block mb-1">Manzana</label>
                 <select x-model="exportForm.manzana_id"
@@ -158,13 +146,11 @@
                   </template>
                 </select>
               </div>
-              {{-- Mes --}}
               <div>
                 <label class="block mb-1">Mes</label>
                 <input type="month" x-model="exportForm.month"
                        class="w-full p-2 border rounded"/>
               </div>
-              {{-- Acciones --}}
               <div class="flex justify-end space-x-2 mt-4">
                 <button @click="closeExportPopup()"
                         class="px-4 py-2 border rounded">Cancelar</button>
@@ -256,6 +242,11 @@
                 @endforeach
               </tbody>
             </x-table>
+          </div>
+
+          {{-- Paginación --}}
+          <div class="mt-4">
+            {{ $consumos->links() }}
           </div>
         </x-html.box>
     </div>

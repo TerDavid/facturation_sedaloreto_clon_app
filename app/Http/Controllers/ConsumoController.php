@@ -20,23 +20,23 @@ use Carbon\Carbon;
 
 class ConsumoController extends Controller
 {
-    public function index()
-    {
-        $consumos = Consumo::with([
-                'cliente.manzana.ciudad',
-                'cliente.manzana.sector',
-            ])
-            ->orderByDesc('hora_registro_consumo')
-            ->get();
+   public function index()
+{
+    $consumos = Consumo::with([
+            'cliente.manzana.ciudad',
+            'cliente.manzana.sector',
+        ])
+        ->orderByDesc('hora_registro_consumo')
+        ->paginate(10);          // ← paginamos de 10 en 10
 
-        $ciudades    = Ciudad::orderBy('nombre')->get(['id','nombre']);
-        $allSectores = Sector::orderBy('sector')->get(['id','id_ciudad','sector']);
-        $allManzanas = Manzana::orderBy('manzana')->get(['id','id_sector','manzana']);
+    $ciudades    = Ciudad::orderBy('nombre')->get(['id','nombre']);
+    $allSectores = Sector::orderBy('sector')->get(['id','id_ciudad','sector']);
+    $allManzanas = Manzana::orderBy('manzana')->get(['id','id_sector','manzana']);
 
-        return view('facturation.consumo.index', compact(
-            'consumos','ciudades','allSectores','allManzanas'
-        ));
-    }
+    return view('facturation.consumo.index', compact(
+        'consumos','ciudades','allSectores','allManzanas'
+    ));
+}
 
     public function create()
     {
