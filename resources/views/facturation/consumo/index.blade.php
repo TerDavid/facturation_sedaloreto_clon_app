@@ -221,8 +221,8 @@
                   <th class="px-4 py-2">Dirección</th>
                   <th class="px-4 py-2">m³ Consumidos</th>
                   <th class="px-4 py-2">Fecha / Hora</th>
-                  <th class="px-4 py-2">Fecha Emisión</th>
-                  <th class="px-4 py-2">Fecha Vencimiento</th>
+                  <th class="px-4 py-2">Periodo Inicio</th>
+                  <th class="px-4 py-2">Periodo Fin</th>
                   <th class="px-4 py-2">Valor</th>
                   <th class="px-4 py-2">Acciones</th>
                 </tr>

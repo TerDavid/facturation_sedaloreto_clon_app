@@ -3,12 +3,11 @@
 namespace App\Exports;
 
 use App\Models\Consumo;
-use Maatwebsite\Excel\Concerns\{
-    FromCollection,
-    WithMapping,
-    WithHeadings,
-    ShouldAutoSize
-};
+use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class ConsumosExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize
 {
@@ -24,8 +23,9 @@ class ConsumosExport implements FromCollection, WithMapping, WithHeadings, Shoul
         [$year, $month] = explode('-', $this->filters['month']);
 
         $q = Consumo::with(['cliente.manzana.ciudad', 'cliente.manzana.sector'])
-            ->whereYear('hora_registro_consumo', $year)
-            ->whereMonth('hora_registro_consumo', $month);
+            // filtramos por fecha de emisión
+            ->whereYear('fecha_emision', $year)
+            ->whereMonth('fecha_emision', $month);
 
         if ($this->filters['ciudad_id']) {
             $q->whereHas('cliente.manzana.ciudad', fn($q2) =>
@@ -49,6 +49,7 @@ class ConsumosExport implements FromCollection, WithMapping, WithHeadings, Shoul
     public function headings(): array
     {
         return [
+            'ID',
             'Código Suministro',
             'Ciudad',
             'Sector',
@@ -56,21 +57,27 @@ class ConsumosExport implements FromCollection, WithMapping, WithHeadings, Shoul
             'Cliente',
             'Dirección',
             'm³ Consumidos',
-            'Fecha / Hora',
+            'Fecha Emisión',
         ];
     }
 
     public function map($c): array
     {
+        // $c->fecha_emision puede ser string o Carbon, así que lo parseamos siempre:
+        $fecha = $c->fecha_emision instanceof Carbon
+               ? $c->fecha_emision->format('Y-m-d')
+               : Carbon::parse($c->fecha_emision)->format('Y-m-d');
+
         return [
+            $c->id,
             $c->cliente->code_suministro,
             $c->cliente->manzana->ciudad->nombre,
             $c->cliente->manzana->sector->sector,
             $c->cliente->manzana->manzana,
             "{$c->cliente->nombre} {$c->cliente->apellido}",
             $c->cliente->direccion,
-            $c->m3_consumidos,
-            $c->hora_registro_consumo,
+            null,       // se deja en blanco para llenar después
+            $fecha,
         ];
     }
 }

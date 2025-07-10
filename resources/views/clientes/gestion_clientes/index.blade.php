@@ -29,30 +29,7 @@
         <button @click="openForm('create')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
             + Nuevo cliente
         </button>
-        {{-- <div class="col-span-12 mt-2 flex flex-wrap items-center sm:flex-nowrap">
-            <div></div>
-            <div data-tw-placement="bottom-end" class="dropdown">
-                <div></div>
-                <div></div>
-            </div>
-            <div class="mx-auto hidden opacity-70 md:block">
 
-            </div>
-            <div class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto md:ml-0">
-                <div class="relative w-56">
-                    <input
-                        class="h-10 rounded-md border bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/5 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 box w-56 pr-10"
-                        type="text" placeholder="Search...">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" data-lucide="search"
-                        class="lucide lucide-search stroke-[1.5] [--color:currentColor] stroke-(--color) fill-(--color)/25 absolute inset-y-0 right-0 my-auto mr-3 size-4 opacity-70">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </svg>
-                </div>
-            </div>
-        </div> --}}
         {{-- Modal --}}
         <div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50 flex items-start justify-center pt-16 z-50">
             <div class="bg-white rounded-lg w-full max-w-2xl p-6 relative">
@@ -114,8 +91,12 @@
                         <div>
                             <label>DNI</label>
                             <input name="dni" x-model="form.dni" @input="updateCode()"
-                                class="w-full p-2 border rounded" required>
+                                    class="w-full p-2 border rounded" required>
+                            @error('dni')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
+
                         <div>
                             <label>Dirección</label>
                             <input name="direccion" x-model="form.direccion" class="w-full p-2 border rounded">
@@ -126,7 +107,11 @@
                         </div>
                         <div>
                             <label>Correo</label>
-                            <input type="email" name="email" x-model="form.email" class="w-full p-2 border rounded">
+                            <input type="email" name="email" x-model="form.email"
+                                    class="w-full p-2 border rounded">
+                            @error('email')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -188,7 +173,10 @@
                     <div class="mb-4">
                         <label>Código de Suministro</label>
                         <input name="code_suministro" x-model="form.code_suministro" readonly
-                            class="w-full p-2 border rounded bg-gray-100 cursor-not-allowed">
+                                class="w-full p-2 border rounded bg-gray-100 cursor-not-allowed">
+                        @error('code_suministro')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Botones --}}
@@ -223,53 +211,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($clientes as $c)
-                            <tr class="border-t border-gray-700">
-                                <td class="px-4 py-2">{{ $c->manzana->ciudad->nombre }}</td>
-                                <td class="px-4 py-2">{{ $c->manzana->sector->sector }}</td>
-                                <td class="px-4 py-2">{{ $c->manzana->manzana }}</td>
-                                <td class="px-4 py-2">{{ $c->code_suministro }}</td>
-                                <td class="px-4 py-2">{{ $c->nombre }}</td>
-                                <td class="px-4 py-2">{{ $c->apellido }}</td>
-                                <td class="px-4 py-2">{{ $c->dni }}</td>
-                                <td class="px-4 py-2">{{ $c->telefono }}</td>
-                                <td class="px-4 py-2">{{ $c->email }}</td>
-                                <td class="px-4 py-2">{{ $c->categoria }}</td>
-                                <td class="px-4 py-2">
-                                    {{ $c->tarifa_id ? 'Con medidor' : 'Sin medidor' }}
-                                </td>
-                                <td class="px-4 py-2 space-x-2">
-                                    <button
-                                        @click="openForm('edit', {
-                                        id: {{ $c->id }},
-                                        ciudad_id: '{{ $c->manzana->ciudad->id }}',
-                                        sector_id: '{{ $c->manzana->sector->id }}',
-                                        manzana_id: '{{ $c->manzana->id }}',
-                                        nombre: '{{ addslashes($c->nombre) }}',
-                                        apellido: '{{ addslashes($c->apellido) }}',
-                                        dni: '{{ $c->dni }}',
-                                        direccion: '{{ addslashes($c->direccion) }}',
-                                        telefono: '{{ $c->telefono }}',
-                                        email: '{{ $c->email }}',
-                                        crear_medidor: {{ $c->tarifa_id ? 'true' : 'false' }},
-                                        medidor_codigo: '{{ optional($c->medidor)->codigo }}',
-                                        medidor_fecha_instalacion: '{{ optional($c->medidor)->fecha_instalacion }}',
-                                        ubicacion_detallada: '{{ addslashes(optional($c->medidor)->ubicacion_detallada) }}',
-                                        tarifa_id: {{ $c->tarifa_id ?? '""' }},
-                                        consumo_sin_medidor_id: {{ $c->id_consumo_sin_medidor ?? '""' }},
-                                        categoria: '{{ $c->categoria }}',
-                                        code_suministro: '{{ $c->code_suministro }}'
-                                    })"
-                                        class="text-blue-400 hover:underline">Editar</button>
-                                    <form method="POST" action="{{ route('gestion.clientes.destroy', $c->id) }}"
-                                        class="inline" onsubmit="return confirm('¿Eliminar cliente?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-400 hover:underline">Eliminar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach --}}
+
                     </tbody>
                 </x-table>
             </div>
@@ -279,12 +221,6 @@
     <script>
         document.addEventListener('alpine:init', () => {
             // table-clientes
-
-
-
-
-
-
         });
     </script>
     <script>
@@ -364,41 +300,16 @@
                             },
                         },
                         destroy: true,
-                        // stateSave: true,
-                        // stateSaveCallback: function(settings, data) {
-                        //     localStorage.setItem(
-                        //         "DataTables_" + settings.sInstance,
-                        //         JSON.stringify(data)
-                        //     );
-                        // },
-                        // stateLoadCallback: function(settings) {
-                        //     return JSON.parse(
-                        //         localStorage.getItem("DataTables_" + settings.sInstance)
-                        //     );
-                        // },
+
                         processing: true,
                         serverSide: true,
                         ajax: {
                             url: `{{ route('gestion_clientes.datatable') }}`,
-                            // headers: {
-                            //     Authorization: Helpers.ValidationAuth.getAuthorization()
-                            // },
-                            // data: ,
-                            // beforeSend: _fnBeforeSend,
-                            // complete: (xhr, status) => {},
+
                             error: function(xhr, error, thrown) {
-                                // OnFinish()
-                                //alert(xhr.status);
-                                //alert(thrown);
+
                                 if (!["abort"].some((v) => v === thrown)) {
-                                    // Swal.fire({
-                                    //   title: thrown,
-                                    //   html: `
-                                //          <p> Se encontró un error en el servidor, intente más tarde.</p>
-                                //          <p>Mensaje: ${xhr.status} - ${error}</p>
-                                //         `,
-                                    //   icon: "error",
-                                    // }).then((sr) => {});
+
                                 }
                             },
                         },
@@ -470,33 +381,10 @@
                                     </form>`;
                                 }
                             },
-                            // {
-                            //     data: "use_text_user",
-                            //     title: "Usuario",
-                            // },
-                            // {
-                            //     data: "use_int_id",
-                            //     title: "Acciones",
-                            //     render: (d) => {
-                            //         return renderButtons( < >
-                            //             <
-                            //             h1 > asdasd < /h1> <
-                            //             />);
-                            //         },
-                            //     },
+
                         ],
                         initComplete: function(a, b, c) {
-                            // console.log("useEffect initComplete", a, a.oInstance.api(), this.api(), {
-                            //   ...refDatatable.current,
-                            // });
-                            // fnOnInit(this, this.api());
-                            // onLoad(a.oInstance.api())
 
-                            // a.oInstance.api().on("preInit.dt", () => {
-                            //   console.log("useEffect preInit");
-                            //   // if (refDatatable.current !== null && onLoad !== null)
-                            //   //   onLoad(refDatatable.current)
-                            // });
                         },
                     });
                     let self = this;
@@ -517,7 +405,7 @@
                             direccion: data.direccion,
                             telefono: data.telefono,
                             email: data.email,
-                            crear_medidor: data.tarifa_id ? 'true' : 'false',
+                            crear_medidor: !!data.tarifa_id,  // <-- aquí
                             medidor_codigo: data.medidor_codigo,
                             medidor_fecha_instalacion: data.medidor_fecha_instalacion,
                             ubicacion_detallada: data.ubicacion_detallada,
@@ -526,8 +414,6 @@
                             categoria: data.categoria,
                             code_suministro: data.code_suministro
                         });
-
-                        // });
                     });
                 },
                 filterSectores() {
@@ -560,7 +446,7 @@
                         return;
                     }
                     this.form.code_suministro =
-                        `${this.form.ciudad_id}-${this.form.sector_id}-${this.form.manzana_id}-${this.form.dni}`;
+                        `${this.form.ciudad_id}${this.form.sector_id}${this.form.manzana_id}${this.form.dni}`;
                 },
 
                 openForm(mode, cliente = null) {
@@ -590,6 +476,13 @@
                         this.manzanas = [];
                         this.isOpen = true;
                     } else {
+
+                        this.form.crear_medidor = Boolean(cliente.tarifa_id)
+
+                        this.sectores = this.allSectores.filter(s =>
+                        s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
+                        )
+
                         Object.assign(this.form, cliente);
                         this.sectores = this.allSectores.filter(s =>
                             s.reservorio?.bomba?.id_ciudades == cliente.ciudad_id
@@ -597,6 +490,8 @@
                         this.manzanas = this.allManzanas.filter(m =>
                             m.id_sector == cliente.sector_id
                         );
+
+
                         this.$nextTick(() => {
                             this.updateCode();
                             this.isOpen = true;

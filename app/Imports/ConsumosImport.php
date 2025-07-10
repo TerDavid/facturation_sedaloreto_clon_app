@@ -16,34 +16,23 @@ class ConsumosImport implements ToModel, WithHeadingRow
         // 1) Busca el cliente por su código de suministro
         $cliente = Cliente::where('code_suministro', $row['codigo_suministro'])->first();
         if (! $cliente) {
-            // Si no existe el cliente, la ignoramos
             return null;
         }
 
-        // 2) Averigua el año/mes actual (o podrías parsear alguna columna con la fecha del Excel)
-        $year  = now()->year;
-        $month = now()->month;
-
-        // 3) Comprueba si ya hay un consumo para este cliente en el mismo mes
-        $existente = Consumo::where('cliente_id', $cliente->id)
-            ->whereYear('hora_registro_consumo', $year)
-            ->whereMonth('hora_registro_consumo', $month)
-            ->first();
-
-        // 4a) Si existe, actualízalo
+        // 2) Convierte el valor de consumo
         $valor = $row['m³_consumidos'] ?? $row['m3_consumidos'] ?? null;
-        if ($existente) {
-            $existente->m3_consumidos = $valor;
-            $existente->save();
-            // devolvemos null porque ya guardamos manualmente
+        if (is_null($valor)) {
             return null;
         }
 
-        // 4b) Si no existe, creamos uno nuevo
-        return new Consumo([
-            'cliente_id'            => $cliente->id,
-            'm3_consumidos'         => $valor,
-            'hora_registro_consumo' => now(),
+        // 3) Actualiza (o crea) solo m3_consumidos + deja el resto en null
+        $consumo = Consumo::firstOrNew([
+            'cliente_id' => $cliente->id,
+            // podrías usar también 'fecha_emision'/'mes_factura' para identificar mes
         ]);
+        $consumo->m3_consumidos = $valor;
+        $consumo->save();
+
+        return null;
     }
 }
