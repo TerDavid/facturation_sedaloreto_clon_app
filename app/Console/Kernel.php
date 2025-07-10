@@ -9,6 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         \App\Console\Commands\ProcesarConsumosVencidos::class,
+        \App\Console\Commands\ConfirmTwoFactor::class,
     ];
 
     protected function schedule(Schedule $schedule)

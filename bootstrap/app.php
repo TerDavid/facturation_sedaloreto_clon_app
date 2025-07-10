@@ -12,9 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias(['input.request' => \App\CoreFacturalo\InputRequest::class]);
-        // 'input.request' => \App\CoreFacturalo\InputRequest::class,
-
+        // 'input.request' => \App\CoreFacturalo\InputRequest::class;
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withProviders([
+        \App\Providers\FortifyServiceProvider::class,
+    ])
+    ->create();

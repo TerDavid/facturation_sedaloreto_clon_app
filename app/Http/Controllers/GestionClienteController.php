@@ -27,7 +27,7 @@ class GestionClienteController extends Controller
         $clientes    = Cliente::all();
         $tarifas     = Tarifa::orderBy('categoria')->orderBy('rango_min')->get();
         $consumos    = ConsumoSinMedidor::orderBy('categoria')->get();
-
+        
         return view('clientes.gestion_clientes.index', compact(
             'clientes',
             'ciudades',
