@@ -281,6 +281,10 @@ Route::middleware('auth')->group(function () {
     // Procesar la actualización en bloque
     Route::put('facturation/valores', [ValorGeneralController::class, 'updateAll'])
         ->name('valores.updateAll');
+
+
+    Route::get('facturation/consumo/exportar-reporte', [ConsumoController::class, 'exportarReporte'])
+     ->name('facturation.consumo.exportarReporte');
 });
 
 Route::get('consulta-factura/{codigo}/descargar', [ConsultaFacturaController::class, 'descargar'])

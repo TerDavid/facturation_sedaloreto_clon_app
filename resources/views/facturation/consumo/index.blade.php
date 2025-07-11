@@ -29,6 +29,79 @@
     @endif
 
     <div x-data="facturaManager()" class="py-6 space-y-6">
+
+        {{-- FORMULARIO DE FILTROS --}}
+        <form method="GET" action="{{ route('facturation.consumo.index') }}"
+              class="flex flex-wrap items-end space-x-4 mb-4">
+          {{-- Ciudad --}}
+          <div>
+            <label class="block text-sm font-medium mb-1">Ciudad</label>
+            <select name="ciudad_id" class="w-full p-2 border rounded">
+              <option value="">→ Todas</option>
+              @foreach($ciudades as $ciud)
+                <option value="{{ $ciud->id }}"
+                  {{ request('ciudad_id') == $ciud->id ? 'selected' : '' }}>
+                  {{ $ciud->nombre }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+          {{-- Mes --}}
+          <div>
+            <label class="block text-sm font-medium mb-1">Mes</label>
+            <select name="month" class="w-full p-2 border rounded">
+              <option value="">→ Todos</option>
+              <option value="1"  {{ request('month')=='1'  ? 'selected':'' }}>Enero</option>
+              <option value="2"  {{ request('month')=='2'  ? 'selected':'' }}>Febrero</option>
+              <option value="3"  {{ request('month')=='3'  ? 'selected':'' }}>Marzo</option>
+              <option value="4"  {{ request('month')=='4'  ? 'selected':'' }}>Abril</option>
+              <option value="5"  {{ request('month')=='5'  ? 'selected':'' }}>Mayo</option>
+              <option value="6"  {{ request('month')=='6'  ? 'selected':'' }}>Junio</option>
+              <option value="7"  {{ request('month')=='7'  ? 'selected':'' }}>Julio</option>
+              <option value="8"  {{ request('month')=='8'  ? 'selected':'' }}>Agosto</option>
+              <option value="9"  {{ request('month')=='9'  ? 'selected':'' }}>Septiembre</option>
+              <option value="10" {{ request('month')=='10' ? 'selected':'' }}>Octubre</option>
+              <option value="11" {{ request('month')=='11' ? 'selected':'' }}>Noviembre</option>
+              <option value="12" {{ request('month')=='12' ? 'selected':'' }}>Diciembre</option>
+            </select>
+          </div>
+          {{-- Año --}}
+          <div>
+            <label class="block text-sm font-medium mb-1">Año</label>
+            <select name="year" class="w-full p-2 border rounded">
+              <option value="">→ Todos</option>
+              @foreach($years as $y)
+                <option value="{{ $y }}"
+                  {{ request('year') == $y ? 'selected' : '' }}>
+                  {{ $y }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+          {{-- Botones de Formulario --}}
+          <div class="flex space-x-2">
+            <button type="submit"
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+              Filtrar
+            </button>
+            <a href="{{ route('facturation.consumo.index') }}"
+               class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded">
+              Limpiar
+            </a>
+             <a href="{{ route('facturation.consumo.exportarReporte', [
+      'ciudad_id'  => request('ciudad_id'),
+     'sector_id'  => request('sector_id'),
+    'manzana_id' => request('manzana_id'),
+      'month'      => request('month'),
+      'year'       => request('year'),
+    ]) }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+              Descargar Reporte
+            </a>
+          </div>
+        </form>
+        {{-- FIN FORMULARIO DE FILTROS --}}
+
         {{-- Botones principales --}}
         <div class="flex space-x-2">
             <a href="{{ route('facturation.consumo.create') }}"
@@ -47,6 +120,7 @@
                     class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">
               Importar Consumos
             </button>
+
         </div>
 
         {{-- Pop-up: Emitir Facturas --}}
@@ -151,8 +225,8 @@
                 <input type="month" x-model="exportForm.month"
                        class="w-full p-2 border rounded"/>
               </div>
-              <div class="flex justify-end space-x-2 mt-4">
-                <button @click="closeExportPopup()"
+              <div class="flex justify-end space-x-2">
+                <button @click="closeExportPopup()" type="button"
                         class="px-4 py-2 border rounded">Cancelar</button>
                 <button @click="submitExport()"
                         class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded">
@@ -180,8 +254,7 @@
                        class="w-full p-2 border rounded" required>
               </div>
               <div class="flex justify-end space-x-2">
-                <button @click.prevent="closeImportPopup()"
-                        type="button"
+                <button @click.prevent="closeImportPopup()" type="button"
                         class="px-4 py-2 border rounded">Cancelar</button>
                 <button type="submit"
                         class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">

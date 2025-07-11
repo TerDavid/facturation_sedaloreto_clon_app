@@ -11,6 +11,7 @@ use App\Models\Sector;
 use App\Models\Tarifa;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReporteConsumosExport;
 use App\Exports\ConsumosExport;
 use App\Imports\ConsumosImport;
 use App\Http\Requests\StoreConsumoRequest;
@@ -20,22 +21,50 @@ use Carbon\Carbon;
 
 class ConsumoController extends Controller
 {
-   public function index()
+public function index(Request $request)
 {
-    $consumos = Consumo::with([
+    // 1) Capturamos valores de filtros
+    $ciudadId = $request->input('ciudad_id');
+    $month    = $request->input('month');
+    $year     = $request->input('year');
+
+    // 2) Armamos la consulta base
+    $q = Consumo::with([
             'cliente.manzana.ciudad',
             'cliente.manzana.sector',
-        ])
-        // Ordenar por fecha de emisión, de más reciente a más antiguo
-        ->orderByDesc('fecha_emision')
-        ->paginate(10);
+        ]);
 
+    // 3) Aplicamos filtros si existen
+    if ($ciudadId) {
+        $q->whereHas('cliente.manzana.ciudad', fn($q2) =>
+            $q2->where('id', $ciudadId)
+        );
+    }
+    if ($month) {
+        $q->whereMonth('fecha_emision', $month);
+    }
+    if ($year) {
+        $q->whereYear('fecha_emision', $year);
+    }
+
+    // 4) Orden, paginación y mantenemos query string
+    $consumos = $q
+        ->orderByDesc('fecha_emision')
+        ->paginate(10)
+        ->appends($request->only(['ciudad_id','month','year']));
+
+    // 5) Datos para selects
     $ciudades    = Ciudad::orderBy('nombre')->get(['id','nombre']);
     $allSectores = Sector::orderBy('sector')->get(['id','id_ciudad','sector']);
     $allManzanas = Manzana::orderBy('manzana')->get(['id','id_sector','manzana']);
+    // extraemos años disponibles de los consumos
+    $years = Consumo::selectRaw('YEAR(fecha_emision) as year')
+                    ->distinct()
+                    ->orderByDesc('year')
+                    ->pluck('year');
 
     return view('facturation.consumo.index', compact(
-        'consumos','ciudades','allSectores','allManzanas'
+        'consumos','ciudades','allSectores','allManzanas','years'
     ));
 }
 
@@ -176,6 +205,41 @@ public function emitir(Request $request)
 
         return Excel::download(new ConsumosExport($data), $filename);
     }
+
+   public function exportarReporte(Request $request)
+{
+    $data = $request->validate([
+        'ciudad_id'  => 'nullable|exists:ciudades,id',
+        'sector_id'  => 'nullable|exists:sectores,id',
+        'manzana_id' => 'nullable|exists:manzanas,id',
+        'month'      => 'nullable|integer|min:1|max:12',
+        'year'       => 'nullable|integer',
+    ]);
+
+    // Aseguramos las claves en el array aunque no vengan en la petición
+    $data['month'] = $data['month'] ?? null;
+    $data['year']  = $data['year']  ?? null;
+
+    // Construimos etiqueta para el filename
+    if ($data['year'] && $data['month']) {
+        $label = "{$data['year']}-" . str_pad($data['month'], 2, '0', STR_PAD_LEFT);
+    } elseif ($data['month']) {
+        // Opcional: si quieres permitir filtrar sólo por mes sin año
+        $label = "mes-" . str_pad($data['month'], 2, '0', STR_PAD_LEFT);
+    } elseif ($data['year']) {
+        $label = (string) $data['year'];
+    } else {
+        $label = 'todos';
+    }
+
+    $fileName = "reporte_consumos_{$label}.xlsx";
+
+    return Excel::download(
+        new ReporteConsumosExport($data),
+        $fileName
+    );
+}
+
 
    public function importar(Request $request)
         {
