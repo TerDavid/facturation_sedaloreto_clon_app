@@ -52,6 +52,23 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Confirmar 2FA
+    Route::post('/user/confirmed-two-factor-authentication', function () {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $code = request('code');
+        
+        // Verificación simple del código
+        if (strlen($code) === 6 && is_numeric($code)) {
+            \Illuminate\Support\Facades\DB::table('users')
+                ->where('id', $user->id)
+                ->update(['two_factor_confirmed_at' => now()]);
+            
+            return redirect()->route('profile.edit')->with('status', 'two-factor-authentication-confirmed');
+        }
+        
+        return back()->withErrors(['code' => 'El código ingresado no es válido.']);
+    })->name('two-factor.confirm');
+
     /*
     |--------------------------------------------------------------------------
     | Planta, Bomba, Reservorio, Sector, Manzana
@@ -167,8 +184,8 @@ Route::middleware('auth')->group(function () {
     Route::view('tecnico',        'tecnico.index')->name('tecnico.index');
     Route::view('tecnico/create', 'tecnico.create')->name('tecnico.create');
     Route::view('tecnico/assign', 'tecnico.assign')->name('tecnico.assign');
-    Route::post('tecnico', [TecnicoController::class, 'store'])->name('tecnico.store');
-    Route::resource('tecnico', TecnicoController::class);
+    // Route::post('tecnico', [TecnicoController::class, 'store'])->name('tecnico.store');
+    // Route::resource('tecnico', TecnicoController::class);
 
     // Parte nueva agregada
 
